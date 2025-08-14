@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學習 | TingNotes - 技術學習與知識分享</title>
-    <meta name="description" content="TingNotes 學習專區 - 深入的技術教學、程式語言指南、演算法解析">
+    <title>學習 | TingNotes - 知識分享與思考記錄</title>
+    <meta name="description" content="TingNotes 學習專區 - 值得分享的觀念與資源，涵蓋程式語言、投資理財、攝影、KPOP等多元主題">
     
     <style>
         :root {
@@ -71,14 +71,14 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: var(--accent-primary);
-            border: none;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
             width: 40px;
             height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -86,8 +86,20 @@
         }
 
         .theme-toggle:hover {
-            background: var(--accent-secondary);
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             transform: scale(1.1);
+        }
+
+        .theme-icon {
+            stroke: rgba(255, 255, 255, 0.8);
+            fill: none;
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            stroke: rgba(255, 255, 255, 1);
         }
 
         .breadcrumb {
@@ -116,6 +128,7 @@
             color: var(--text-secondary);
             font-size: 1.1em;
             margin-bottom: 25px;
+            line-height: 1.6;
         }
 
         /* 統計區塊 */
@@ -155,121 +168,137 @@
             font-weight: 500;
         }
 
-        /* 課程列表 */
-        .courses-section {
+        /* 分類區塊 */
+        .categories-section {
+            margin-bottom: 40px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .category-section {
             background: var(--bg-card);
             border-radius: 15px;
             box-shadow: 0 8px 32px var(--shadow-light);
             border: 1px solid var(--border-color);
             overflow: hidden;
-            margin-bottom: 30px;
         }
 
-        .section-header {
-            padding: 30px 35px 20px;
+        .category-header {
+            padding: 25px 30px 15px;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .section-title {
-            font-size: 1.6em;
+        .category-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            flex-shrink: 0;
+        }
+
+        .category-info h3 {
+            font-size: 1.3em;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 3px;
         }
 
-        .section-desc {
+        .category-info p {
             color: var(--text-secondary);
-            font-size: 1em;
+            font-size: 0.9em;
         }
 
-        .courses-list {
+        .content-list {
             padding: 0;
         }
 
-        .course-item {
+        .content-item {
             display: flex;
             align-items: center;
-            padding: 25px 35px;
+            padding: 20px 30px;
             border-bottom: 1px solid var(--border-color);
             transition: all 0.3s ease;
             text-decoration: none;
             color: var(--text-primary);
         }
 
-        .course-item:last-child {
+        .content-item:last-child {
             border-bottom: none;
         }
 
-        .course-item:hover {
+        .content-item:hover {
             background: var(--bg-secondary);
             text-decoration: none;
             color: var(--text-primary);
         }
 
-        .course-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 12px;
+        .content-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8em;
-            margin-right: 20px;
+            font-size: 1.2em;
+            margin-right: 15px;
             flex-shrink: 0;
         }
 
-        .course-content {
+        .content-details {
             flex: 1;
             min-width: 0;
         }
 
-        .course-title {
-            font-size: 1.3em;
+        .content-title {
+            font-size: 1.1em;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: var(--text-primary);
         }
 
-        .course-desc {
+        .content-desc {
             color: var(--text-secondary);
-            font-size: 0.95em;
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-
-        .course-meta {
-            display: flex;
-            align-items: center;
-            gap: 20px;
             font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .content-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.75em;
             color: var(--text-secondary);
         }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .course-stats {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
-            margin-left: 20px;
+        .content-stats {
+            text-align: right;
             flex-shrink: 0;
+            margin-left: 15px;
         }
 
         .view-count {
-            font-size: 1.1em;
+            font-size: 0.9em;
             font-weight: 600;
             color: var(--accent-primary);
         }
 
-        .chapters-count {
-            font-size: 0.85em;
+        .content-status {
+            font-size: 0.75em;
             color: var(--text-secondary);
+            margin-top: 2px;
         }
 
         /* 即將推出 */
@@ -299,6 +328,7 @@
             color: var(--text-secondary);
             max-width: 500px;
             margin: 0 auto;
+            line-height: 1.6;
         }
 
         /* 載入動畫 */
@@ -330,26 +360,25 @@
                 font-size: 1.8em;
             }
 
-            .section-header,
-            .course-item {
-                padding: 20px;
+            .categories-grid {
+                grid-template-columns: 1fr;
             }
 
-            .course-item {
+            .category-header,
+            .content-item {
+                padding: 15px 20px;
+            }
+
+            .content-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 10px;
             }
 
-            .course-stats {
-                align-items: flex-start;
+            .content-stats {
+                align-self: stretch;
+                text-align: left;
                 margin-left: 0;
-                width: 100%;
-            }
-
-            .course-meta {
-                flex-wrap: wrap;
-                gap: 15px;
             }
 
             .stats-section {
@@ -368,7 +397,9 @@
     <div class="container">
         <header class="header">
             <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
-                <span id="theme-icon">🌙</span>
+                <svg class="theme-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
             </button>
             
             <div class="breadcrumb">
@@ -376,18 +407,21 @@
             </div>
             
             <h1 class="page-title">學習</h1>
-            <p class="page-subtitle">技術學習筆記與心得分享，包含程式語言、演算法等深度內容</p>
+            <p class="page-subtitle">
+                分享我認為值得學習的觀念與資源<br>
+                涵蓋程式技術、投資理財、攝影藝術、音樂文化等多元主題
+            </p>
         </header>
 
         <!-- 統計數據 -->
         <section class="stats-section">
             <div class="stat-card">
-                <span class="stat-number" id="total-courses">1</span>
-                <div class="stat-label">課程總數</div>
+                <span class="stat-number" id="total-content">3</span>
+                <div class="stat-label">內容總數</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="total-chapters">18</span>
-                <div class="stat-label">章節總數</div>
+                <span class="stat-number" id="total-categories">4</span>
+                <div class="stat-label">主題分類</div>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="total-views">
@@ -401,72 +435,121 @@
             </div>
         </section>
 
-        <!-- 課程列表 -->
-        <section class="courses-section">
-            <div class="section-header">
-                <h2 class="section-title">程式語言學習</h2>
-                <p class="section-desc">深入探討程式語言核心概念與實際應用</p>
-            </div>
-            
-            <div class="courses-list">
-                <a href="https://yehchuntin.github.io/c-pointer-tutorial/" class="course-item" target="_blank" onclick="incrementViewCount('c-pointer')">
-                    <div class="course-icon">🔗</div>
-                    <div class="course-content">
-                        <h3 class="course-title">C語言指標完整教學</h3>
-                        <p class="course-desc">從基礎概念到進階應用，完整掌握C語言指標的精髓。包含記憶體管理、函式指標、動態配置等核心主題。</p>
-                        <div class="course-meta">
-                            <div class="meta-item">
-                                <span>📅</span>
-                                <span>2025年08月</span>
+        <!-- 內容分類 -->
+        <section class="categories-section">
+            <div class="categories-grid">
+                <!-- 程式技術 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">💻</div>
+                        <div class="category-info">
+                            <h3>程式技術</h3>
+                            <p>深度技術學習與實踐</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <a href="https://yehchuntin.github.io/c-pointer-tutorial/" class="content-item" target="_blank" onclick="incrementViewCount('c-pointer')">
+                            <div class="content-icon">🔗</div>
+                            <div class="content-details">
+                                <div class="content-title">C語言指標完整教學</div>
+                                <div class="content-desc">從基礎到進階，完整掌握指標精髓</div>
+                                <div class="content-meta">
+                                    <span>📅 2025.08</span>
+                                    <span>📚 18章節</span>
+                                    <span>🎯 初級-進階</span>
+                                </div>
                             </div>
-                            <div class="meta-item">
-                                <span>📚</span>
-                                <span>18個章節</span>
+                            <div class="content-stats">
+                                <div class="view-count" id="c-pointer-views">
+                                    <span class="loading"></span>
+                                </div>
+                                <div class="content-status">已完成</div>
                             </div>
-                            <div class="meta-item">
-                                <span>⏱️</span>
-                                <span>約8-12小時</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 投資理財 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">📈</div>
+                        <div class="category-info">
+                            <h3>投資理財</h3>
+                            <p>投資觀念與市場分析</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <div class="content-item" style="opacity: 0.6; cursor: not-allowed;">
+                            <div class="content-icon">📊</div>
+                            <div class="content-details">
+                                <div class="content-title">股市投資基礎觀念</div>
+                                <div class="content-desc">價值投資與技術分析入門</div>
+                                <div class="content-meta">
+                                    <span>📅 規劃中</span>
+                                    <span>📚 預計12章節</span>
+                                </div>
                             </div>
-                            <div class="meta-item">
-                                <span>🎯</span>
-                                <span>初級到進階</span>
+                            <div class="content-stats">
+                                <div class="content-status">準備中</div>
                             </div>
                         </div>
                     </div>
-                    <div class="course-stats">
-                        <div class="view-count" id="c-pointer-views">
-                            <span class="loading"></span>
+                </div>
+
+                <!-- 攝影藝術 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">📸</div>
+                        <div class="category-info">
+                            <h3>攝影藝術</h3>
+                            <p>攝影技巧與美學分享</p>
                         </div>
-                        <div class="chapters-count">已完成</div>
                     </div>
-                </a>
+                    <div class="content-list">
+                        <div class="content-item" style="opacity: 0.6; cursor: not-allowed;">
+                            <div class="content-icon">🎨</div>
+                            <div class="content-details">
+                                <div class="content-title">街頭攝影心得</div>
+                                <div class="content-desc">構圖、光線與瞬間捕捉</div>
+                                <div class="content-meta">
+                                    <span>📅 規劃中</span>
+                                    <span>📚 攝影作品集</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">構思中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- 即將推出 -->
         <section class="coming-soon-section">
-            <div class="coming-soon-icon">🚀</div>
-            <h3 class="coming-soon-title">更多課程正在準備中</h3>
+            <div class="coming-soon-icon">✨</div>
+            <h3 class="coming-soon-title">持續探索，持續分享</h3>
             <p class="coming-soon-desc">
-                資料結構與演算法、系統程式設計、網路程式開發等課程正在規劃階段，
-                將持續為您帶來高品質的技術學習內容。
+                學習是一個持續的過程，我會不斷發掘值得分享的觀念與資源。
+                無論是技術深度、投資智慧，還是攝影技巧
+                只要是我認為有價值的內容，都會在這裡與您分享。
             </p>
         </section>
     </div>
 
     <script>
-        // 觀看次數數據存儲
-        const courseData = {
+        // 內容數據
+        const contentData = {
             'c-pointer': {
                 views: 0,
-                chapters: 18,
+                category: 'programming',
+                status: 'completed',
                 publishDate: '2025-08'
             }
         };
 
-        // 計數器API基礎URL - 使用免費的 CountAPI 服務
-        const COUNTER_API_BASE = 'https://api.countapi.xyz';
-        const SITE_KEY = 'tingnotes-learning';
+        // 使用更可靠的 Firebase Realtime Database API
+        const FIREBASE_URL = 'https://tingnotes-counter-default-rtdb.firebaseio.com';
 
         // 深淺色模式切換
         function toggleTheme() {
@@ -476,11 +559,11 @@
             
             if (currentTheme === 'dark') {
                 body.setAttribute('data-theme', 'light');
-                themeIcon.textContent = '🌙';
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
                 localStorage.setItem('theme', 'light');
             } else {
                 body.setAttribute('data-theme', 'dark');
-                themeIcon.textContent = '☀️';
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
                 localStorage.setItem('theme', 'dark');
             }
         }
@@ -491,30 +574,22 @@
             const themeIcon = document.getElementById('theme-icon');
             
             document.body.setAttribute('data-theme', savedTheme);
-            themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-        }
-
-        // 初始化計數器（如果不存在則創建）
-        async function initializeCounter(key, initialValue = 0) {
-            try {
-                const response = await fetch(`${COUNTER_API_BASE}/create?namespace=${SITE_KEY}&key=${key}&value=${initialValue}`);
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Failed to initialize counter:', error);
-                return null;
+            if (savedTheme === 'dark') {
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
+            } else {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
         }
 
         // 獲取計數器值
         async function getCounterValue(key) {
             try {
-                const response = await fetch(`${COUNTER_API_BASE}/get/${SITE_KEY}/${key}`);
+                const response = await fetch(`${FIREBASE_URL}/counters/${key}.json`);
                 const data = await response.json();
-                return data.value || 0;
+                return data || 0;
             } catch (error) {
                 console.error('Failed to get counter value:', error);
-                // 如果API失敗，回退到本地儲存
+                // 回退到本地儲存
                 return parseInt(localStorage.getItem(`fallback_${key}`) || '0');
             }
         }
@@ -522,16 +597,29 @@
         // 增加計數器值
         async function incrementCounter(key) {
             try {
-                const response = await fetch(`${COUNTER_API_BASE}/hit/${SITE_KEY}/${key}`);
-                const data = await response.json();
+                // 先獲取當前值
+                const currentValue = await getCounterValue(key);
+                const newValue = currentValue + 1;
                 
-                // 同時更新本地備份
-                localStorage.setItem(`fallback_${key}`, data.value.toString());
+                // 更新到 Firebase
+                const response = await fetch(`${FIREBASE_URL}/counters/${key}.json`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newValue)
+                });
                 
-                return data.value || 0;
+                if (response.ok) {
+                    // 同時更新本地備份
+                    localStorage.setItem(`fallback_${key}`, newValue.toString());
+                    return newValue;
+                } else {
+                    throw new Error('Failed to update counter');
+                }
             } catch (error) {
                 console.error('Failed to increment counter:', error);
-                // 如果API失敗，使用本地儲存作為備份
+                // 如果 Firebase 失敗，使用本地儲存作為備份
                 const currentValue = parseInt(localStorage.getItem(`fallback_${key}`) || '0');
                 const newValue = currentValue + 1;
                 localStorage.setItem(`fallback_${key}`, newValue.toString());
@@ -540,10 +628,10 @@
         }
 
         // 增加觀看次數
-        async function incrementViewCount(courseId) {
-            if (courseData[courseId]) {
-                const newCount = await incrementCounter(`course_${courseId}`);
-                const viewElement = document.getElementById(`${courseId}-views`);
+        async function incrementViewCount(contentId) {
+            if (contentData[contentId]) {
+                const newCount = await incrementCounter(`content_${contentId}`);
+                const viewElement = document.getElementById(`${contentId}-views`);
                 if (viewElement) {
                     viewElement.textContent = `${formatNumber(newCount)} 次觀看`;
                 }
@@ -564,8 +652,8 @@
         async function updateTotalViews() {
             try {
                 const pageViews = await getCounterValue('page_learning');
-                const courseViews = await getCounterValue('course_c-pointer');
-                const totalViews = pageViews + courseViews;
+                const contentViews = await getCounterValue('content_c-pointer');
+                const totalViews = pageViews + contentViews;
                 
                 const totalViewsElement = document.getElementById('total-views');
                 if (totalViewsElement) {
@@ -583,10 +671,10 @@
         // 載入所有觀看次數
         async function loadViewCounts() {
             try {
-                // 載入課程觀看次數
-                for (const courseId of Object.keys(courseData)) {
-                    const viewCount = await getCounterValue(`course_${courseId}`);
-                    const viewElement = document.getElementById(`${courseId}-views`);
+                // 載入內容觀看次數
+                for (const contentId of Object.keys(contentData)) {
+                    const viewCount = await getCounterValue(`content_${contentId}`);
+                    const viewElement = document.getElementById(`${contentId}-views`);
                     if (viewElement) {
                         viewElement.textContent = `${formatNumber(viewCount)} 次觀看`;
                     }
@@ -626,34 +714,28 @@
 
         // 更新其他統計數據
         function updateOtherStats() {
-            // 更新總章節數
-            const totalChapters = Object.values(courseData).reduce((sum, course) => sum + course.chapters, 0);
-            const totalChaptersElement = document.getElementById('total-chapters');
-            if (totalChaptersElement) {
-                totalChaptersElement.textContent = totalChapters;
+            // 更新內容總數
+            const totalContentElement = document.getElementById('total-content');
+            if (totalContentElement) {
+                // 計算已完成的內容數（目前只有一個完成的內容）
+                totalContentElement.textContent = '1';
             }
 
-            // 更新課程總數
-            const totalCoursesElement = document.getElementById('total-courses');
-            if (totalCoursesElement) {
-                totalCoursesElement.textContent = Object.keys(courseData).length;
+            // 更新分類總數
+            const totalCategoriesElement = document.getElementById('total-categories');
+            if (totalCategoriesElement) {
+                totalCategoriesElement.textContent = '4';
             }
-        }
-
-        // 初始化所有計數器
-        async function initializeAllCounters() {
-            await initializeCounter('page_learning', 0);
-            await initializeCounter('course_c-pointer', 0);
         }
 
         // 檢查是否為新訪客（24小時內不重複計算）
         function shouldCountPageView() {
-            const lastVisit = localStorage.getItem('lastPageVisit');
+            const lastVisit = localStorage.getItem('lastLearningPageVisit');
             const now = Date.now();
             const twentyFourHours = 24 * 60 * 60 * 1000; // 24小時
             
             if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
-                localStorage.setItem('lastPageVisit', now.toString());
+                localStorage.setItem('lastLearningPageVisit', now.toString());
                 return true;
             }
             return false;
@@ -665,9 +747,6 @@
             setLastUpdated();
             updateOtherStats();
             
-            // 初始化計數器
-            await initializeAllCounters();
-            
             // 載入現有的觀看次數
             await loadViewCounts();
             
@@ -677,7 +756,7 @@
             }
             
             // 添加進場動畫
-            const elements = document.querySelectorAll('.stat-card, .courses-section, .coming-soon-section');
+            const elements = document.querySelectorAll('.stat-card, .category-section, .coming-soon-section');
             elements.forEach((element, index) => {
                 element.style.opacity = '0';
                 element.style.transform = 'translateY(20px)';
