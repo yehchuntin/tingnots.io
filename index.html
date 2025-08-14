@@ -711,13 +711,13 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 專案數據 - 只有一個專案時顯示單一專案
+        // 專案數據 - 修正路徑為正確的相對路徑
         const projectsData = [
             {
                 id: 'c-pointer',
                 name: 'C語言指標完整教學',
                 desc: 'C 語言指標概念教學專案，用清晰的範例和圖解幫助初學者理解指標機制',
-                url: '/c-pointer-tutorial/index.html',
+                url: './c-pointer-tutorial/', // ✅ 修正：從首頁到 c-pointer-tutorial 的正確路徑
                 category: 'learning',
                 status: '已完成'
             }
@@ -787,7 +787,7 @@
                 // 顯示備用內容
                 const hotProjectsContainer = document.getElementById('hot-projects');
                 hotProjectsContainer.innerHTML = `
-                    <div class="project-item">
+                    <a href="./c-pointer-tutorial/" class="project-item">
                         <div class="project-rank rank-1">🏆</div>
                         <div class="project-info">
                             <div class="project-name">C語言指標完整教學</div>
@@ -802,7 +802,7 @@
                             <div class="project-views">0 次觀看</div>
                             <div class="project-status">已完成</div>
                         </div>
-                    </div>
+                    </a>
                 `;
             }
         }
