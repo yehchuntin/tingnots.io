@@ -1,15 +1,4 @@
-<!-- 左右側邊欄廣告 - 從學習區塊開始 -->
-            <div class="side-ad side-ad-left">
-                左側廣告<br>
-                (160x600)<br>
-                從學習區塊開始往下
-            </div>
-            
-            <div class="side-ad side-ad-right">
-                右側廣告<br>
-                (160x600)<br>
-                從學習區塊開始往下
-            </div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -164,12 +153,12 @@
 
         /* Main Content */
         main {
-            padding: 60px 0;
+            padding: 40px 0;
         }
 
         .hero {
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 50px;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
@@ -190,107 +179,48 @@
             line-height: 1.6;
         }
 
-        /* AdSense 廣告位置 */
-        .ad-banner {
-            background: var(--bg-secondary);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin: 40px 0;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
         /* About Section */
         .about-section {
             background: var(--bg-secondary);
             border-radius: 12px;
-            padding: 50px 40px;
-            margin-bottom: 60px;
+            padding: 40px;
+            margin-bottom: 40px;
             border: 1px solid var(--border-color);
         }
 
         .about-section h2 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .about-content {
             max-width: 600px;
             margin: 0 auto;
-            font-size: 1.05rem;
-            line-height: 1.8;
+            font-size: 1rem;
+            line-height: 1.7;
             color: var(--text-secondary);
         }
 
         .about-content p {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         /* Categories Grid */
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        /* 廣告卡片樣式 - 與分類卡片相同尺寸 */
-        .ad-card {
-            background: var(--bg-secondary);
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            min-height: 280px;
-        }
-
-        /* 側邊廣告 - 簡化版本 */
-        .side-ad {
-            position: fixed;
-            width: 160px;
-            height: 600px;
-            background: var(--bg-secondary);
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 10;
-            line-height: 1.4;
-        }
-
-        .side-ad-left {
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .side-ad-right {
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .category-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 35px;
+            padding: 30px;
             transition: all 0.2s ease;
             text-decoration: none;
             color: inherit;
@@ -304,33 +234,34 @@
         }
 
         .category-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
             color: white;
         }
 
         .category-card h3 {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .category-card p {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
         }
 
         .category-meta {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             font-style: italic;
         }
@@ -340,28 +271,28 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 60px;
+            padding: 35px;
+            margin-bottom: 40px;
         }
 
         .projects-section h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .projects-section h2::before {
             content: "🔥";
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
         .project-list {
             display: grid;
-            gap: 20px;
+            gap: 16px;
         }
 
         .project-item {
@@ -387,8 +318,8 @@
         .project-rank {
             background: var(--accent-primary);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -403,14 +334,6 @@
             background: linear-gradient(135deg, #ffd700, #ffb347);
         }
 
-        .project-rank.rank-2 {
-            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
-        }
-
-        .project-rank.rank-3 {
-            background: linear-gradient(135deg, #cd7f32, #b87333);
-        }
-
         .project-info {
             flex: 1;
         }
@@ -418,39 +341,39 @@
         .project-name {
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-size: 1.1rem;
         }
 
         .project-desc {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
             line-height: 1.4;
         }
 
         .project-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 0.85rem;
+            gap: 12px;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
 
         .project-stats {
             text-align: right;
             flex-shrink: 0;
-            margin-left: 20px;
+            margin-left: 15px;
         }
 
         .project-views {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--accent-primary);
         }
 
         .project-status {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             margin-top: 2px;
         }
@@ -472,7 +395,7 @@
         /* Footer */
         footer {
             border-top: 1px solid var(--border-color);
-            padding: 40px 0;
+            padding: 30px 0;
             text-align: center;
             background: var(--bg-secondary);
         }
@@ -483,7 +406,7 @@
         }
 
         .contact-info {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .contact-info a {
@@ -586,10 +509,10 @@
             
             .about-section,
             .projects-section {
-                padding: 30px 20px;
+                padding: 25px 20px;
             }
             
-            .category-card, .ad-card {
+            .category-card {
                 padding: 25px;
             }
             
@@ -601,42 +524,14 @@
             .project-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
-                padding: 20px;
+                gap: 12px;
+                padding: 18px;
             }
 
             .project-stats {
                 align-self: stretch;
                 text-align: left;
                 margin-left: 0;
-            }
-
-            /* 手機版隱藏側邊廣告和多餘的分類廣告 */
-            .side-ad {
-                display: none;
-            }
-
-            .ad-card {
-                display: none;
-            }
-        }
-
-        /* 平板和小桌面螢幕 */
-        @media (max-width: 1400px) {
-            .side-ad {
-                display: none;
-            }
-        }
-
-        /* 中等螢幕調整廣告 */
-        @media (max-width: 1200px) {
-            .ad-card {
-                min-height: 200px;
-                padding: 25px;
-            }
-            
-            .ad-placeholder {
-                font-size: 0.8rem;
             }
         }
 
@@ -765,18 +660,12 @@
                 </a>
             </section>
 
-            <!-- AdSense 廣告位置 3: Categories 和 Hot Projects 之間 -->
-            <div class="ad-banner">
-                <!-- 在這裡插入 Google AdSense 橫幅廣告 (728x90) -->
-                廣告位置 3 - 分類和熱門專案之間
-            </div>
-
             <section class="projects-section fade-in">
                 <h2>熱門專案</h2>
                 <div class="project-list" id="hot-projects">
                     <!-- 載入中狀態 -->
                     <div class="project-item">
-                        <div class="project-rank rank-1">1</div>
+                        <div class="project-rank rank-1">🏆</div>
                         <div class="project-info">
                             <div class="project-name">載入中...</div>
                             <div class="project-desc">正在獲取熱門專案數據</div>
@@ -787,12 +676,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- AdSense 廣告位置 4: Hot Projects 下方 -->
-            <div class="ad-banner">
-                <!-- 在這裡插入 Google AdSense 方形廣告 (300x250) -->
-                廣告位置 4 - 熱門專案下方
-            </div>
         </div>
     </main>
 
@@ -828,7 +711,7 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 專案數據
+        // 專案數據 - 只有一個專案時顯示單一專案
         const projectsData = [
             {
                 id: 'c-pointer',
@@ -837,22 +720,6 @@
                 url: 'https://yehchuntin.github.io/c-pointer-tutorial/',
                 category: 'learning',
                 status: '已完成'
-            },
-            {
-                id: 'data-structure',
-                name: 'Data Structure in C',
-                desc: 'C 語言資料結構學習筆記與實作範例',
-                url: './Learning/dataStructure%20in%20C/',
-                category: 'learning',
-                status: '進行中'
-            },
-            {
-                id: 'tingnotes-platform',
-                name: 'TingNotes 平台開發',
-                desc: '持續優化這個個人網站，增加內容管理功能和互動體驗',
-                url: './projects/',
-                category: 'learning',
-                status: '持續更新'
             }
         ];
 
@@ -888,22 +755,24 @@
                     })
                 );
 
-                // 按觀看次數排序，取前3名
-                const topProjects = projectsWithViews
-                    .sort((a, b) => b.views - a.views)
-                    .slice(0, 3);
+                // 按觀看次數排序
+                const sortedProjects = projectsWithViews.sort((a, b) => b.views - a.views);
+
+                // 如果只有一個專案，顯示單一專案
+                const displayProjects = sortedProjects.length === 1 ? sortedProjects : sortedProjects.slice(0, 3);
 
                 // 渲染熱門專案
                 const hotProjectsContainer = document.getElementById('hot-projects');
-                hotProjectsContainer.innerHTML = topProjects.map((project, index) => `
+                hotProjectsContainer.innerHTML = displayProjects.map((project, index) => `
                     <a href="${project.url}" class="project-item" target="_blank">
-                        <div class="project-rank rank-${index + 1}">${index + 1}</div>
+                        <div class="project-rank rank-${index + 1}">${sortedProjects.length === 1 ? '🏆' : index + 1}</div>
                         <div class="project-info">
                             <div class="project-name">${project.name}</div>
                             <div class="project-desc">${project.desc}</div>
                             <div class="project-meta">
                                 <span>📂 ${project.category}</span>
                                 <span>🏷️ ${project.status}</span>
+                                ${sortedProjects.length === 1 ? '<span>⭐ 唯一專案</span>' : ''}
                             </div>
                         </div>
                         <div class="project-stats">
@@ -919,13 +788,14 @@
                 const hotProjectsContainer = document.getElementById('hot-projects');
                 hotProjectsContainer.innerHTML = `
                     <div class="project-item">
-                        <div class="project-rank rank-1">1</div>
+                        <div class="project-rank rank-1">🏆</div>
                         <div class="project-info">
                             <div class="project-name">C語言指標完整教學</div>
                             <div class="project-desc">從基礎到進階，完整掌握指標精髓</div>
                             <div class="project-meta">
                                 <span>📂 learning</span>
                                 <span>🏷️ 已完成</span>
+                                <span>⭐ 唯一專案</span>
                             </div>
                         </div>
                         <div class="project-stats">

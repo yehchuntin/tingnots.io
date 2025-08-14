@@ -66,8 +66,8 @@
         .header {
             background: var(--bg-card);
             border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 30px;
+            padding: 35px;
+            margin-bottom: 25px;
             box-shadow: 0 8px 32px var(--shadow-light);
             border: 1px solid var(--border-color);
             position: relative;
@@ -131,7 +131,7 @@
         .page-subtitle {
             color: var(--text-secondary);
             font-size: 1.1em;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.6;
         }
 
@@ -139,15 +139,15 @@
         .stats-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 18px;
+            margin-bottom: 35px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
+            padding: 22px;
             text-align: center;
             box-shadow: 0 4px 12px var(--shadow-light);
             transition: all 0.3s ease;
@@ -159,7 +159,7 @@
         }
 
         .stat-number {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: 700;
             color: var(--accent-primary);
             display: block;
@@ -172,27 +172,15 @@
             font-weight: 500;
         }
 
-        /* AdSense 廣告位置 */
-        .ad-banner {
-            background: var(--bg-secondary);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin: 30px 0;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
         /* 分類區塊 */
         .categories-section {
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 22px;
         }
 
         .category-section {
@@ -204,7 +192,7 @@
         }
 
         .category-header {
-            padding: 25px 30px 15px;
+            padding: 22px 28px 12px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
@@ -212,19 +200,19 @@
         }
 
         .category-icon {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4em;
+            font-size: 1.3em;
             flex-shrink: 0;
         }
 
         .category-info h3 {
-            font-size: 1.3em;
+            font-size: 1.25em;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 3px;
@@ -242,7 +230,7 @@
         .content-item {
             display: flex;
             align-items: center;
-            padding: 20px 30px;
+            padding: 18px 28px;
             border-bottom: 1px solid var(--border-color);
             transition: all 0.3s ease;
             text-decoration: none;
@@ -269,14 +257,14 @@
         }
 
         .content-icon {
-            width: 35px;
-            height: 35px;
+            width: 32px;
+            height: 32px;
             background: var(--bg-secondary);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
+            font-size: 1.1em;
             margin-right: 15px;
             flex-shrink: 0;
         }
@@ -331,19 +319,19 @@
             background: var(--bg-card);
             border: 2px dashed var(--border-color);
             border-radius: 15px;
-            padding: 50px;
+            padding: 40px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .coming-soon-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
+            font-size: 2.5em;
+            margin-bottom: 18px;
             opacity: 0.6;
         }
 
         .coming-soon-title {
-            font-size: 1.4em;
+            font-size: 1.3em;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 10px;
@@ -351,9 +339,10 @@
 
         .coming-soon-desc {
             color: var(--text-secondary);
-            max-width: 500px;
+            max-width: 480px;
             margin: 0 auto;
             line-height: 1.6;
+            font-size: 0.95em;
         }
 
         /* 載入動畫 */
@@ -393,6 +382,7 @@
 
             .categories-grid {
                 grid-template-columns: 1fr;
+                gap: 18px;
             }
 
             .category-header,
@@ -414,6 +404,7 @@
 
             .stats-section {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
         }
 
@@ -444,16 +435,10 @@
             </p>
         </header>
 
-        <!-- AdSense 廣告位置 1: Header 下方 -->
-        <div class="ad-banner">
-            <!-- Google AdSense 橫幅廣告 (728x90 或 320x50) -->
-            廣告位置 1 - Header 下方橫幅
-        </div>
-
         <!-- 統計數據 -->
         <section class="stats-section">
             <div class="stat-card">
-                <span class="stat-number" id="total-content">1</span>
+                <span class="stat-number" id="total-content">2</span>
                 <div class="stat-label">內容總數</div>
             </div>
             <div class="stat-card">
@@ -471,12 +456,6 @@
                 <div class="stat-label">最後更新</div>
             </div>
         </section>
-
-        <!-- AdSense 廣告位置 2: 統計和分類之間 -->
-        <div class="ad-banner">
-            <!-- Google AdSense 方形廣告 (300x250) -->
-            廣告位置 2 - 統計和分類之間
-        </div>
 
         <!-- 內容分類 -->
         <section class="categories-section">
@@ -587,12 +566,6 @@
             </div>
         </section>
 
-        <!-- AdSense 廣告位置 3: 分類和即將推出之間 -->
-        <div class="ad-banner">
-            <!-- Google AdSense 橫幅廣告 (728x90) -->
-            廣告位置 3 - 分類和即將推出之間
-        </div>
-
         <!-- 即將推出 -->
         <section class="coming-soon-section">
             <div class="coming-soon-icon">✨</div>
@@ -603,12 +576,6 @@
                 只要是我認為有價值的內容，都會在這裡與您分享。
             </p>
         </section>
-
-        <!-- AdSense 廣告位置 4: 底部 -->
-        <div class="ad-banner">
-            <!-- Google AdSense 方形廣告 (300x250) -->
-            廣告位置 4 - 頁面底部
-        </div>
     </div>
 
     <!-- Firebase SDK -->
@@ -874,4 +841,4 @@
         });
     </script>
 </body>
-</html>
+</html>}
