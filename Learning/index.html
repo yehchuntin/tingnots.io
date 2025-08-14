@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>學習 | TingNotes - 知識分享與思考記錄</title>
-    <meta name="description" content="TingNotes 學習專區 - 值得分享的觀念與資源，涵蓋程式語言、投資理財、攝影等多元主題">
+    <meta name="description" content="TingNotes 學習專區 - 程式技術、投資理財、攝影藝術等多元學習內容">
     
     <style>
         :root {
@@ -22,6 +22,9 @@
             --theme-btn-bg: rgba(0, 0, 0, 0.1);
             --theme-btn-border: rgba(0, 0, 0, 0.2);
             --theme-btn-icon: rgba(0, 0, 0, 0.7);
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
         }
 
         [data-theme="dark"] {
@@ -39,6 +42,9 @@
             --theme-btn-bg: rgba(255, 255, 255, 0.1);
             --theme-btn-border: rgba(255, 255, 255, 0.3);
             --theme-btn-icon: rgba(255, 255, 255, 0.8);
+            --success-color: #48bb78;
+            --warning-color: #ed8936;
+            --danger-color: #f56565;
         }
 
         * {
@@ -106,6 +112,39 @@
             transition: all 0.3s ease;
         }
 
+        /* 頁面導航 */
+        .page-navigation {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .nav-link:hover {
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-link.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
         .breadcrumb {
             color: var(--text-secondary);
             font-size: 0.85em;
@@ -170,6 +209,168 @@
             color: var(--text-secondary);
             font-size: 0.9em;
             font-weight: 500;
+        }
+
+        /* 熱門專案區塊 */
+        .featured-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 35px;
+        }
+
+        .featured-header {
+            padding: 25px 30px 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .featured-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .featured-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            font-size: 0.75em;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .featured-list {
+            padding: 0;
+        }
+
+        .featured-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .featured-item:last-child {
+            border-bottom: none;
+        }
+
+        .featured-item:hover:not(.disabled) {
+            background: var(--bg-secondary);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .featured-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .featured-item.disabled:hover {
+            background: transparent;
+        }
+
+        .project-rank {
+            background: var(--accent-primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-right: 18px;
+            flex-shrink: 0;
+        }
+
+        .project-rank.rank-1 {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+        }
+
+        .project-rank.rank-2 {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+        }
+
+        .project-rank.rank-3 {
+            background: linear-gradient(135deg, #cd7f32, #b8860b);
+        }
+
+        .content-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .content-desc {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .content-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-progress {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-planned {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+
+        .content-stats {
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .view-count {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .update-badge {
+            font-size: 0.75em;
+            color: var(--success-color);
+            margin-top: 2px;
         }
 
         /* 分類區塊 */
@@ -241,7 +442,7 @@
             border-bottom: none;
         }
 
-        .content-item:hover {
+        .content-item:hover:not(.disabled) {
             background: var(--bg-secondary);
             text-decoration: none;
             color: var(--text-primary);
@@ -269,82 +470,6 @@
             flex-shrink: 0;
         }
 
-        .content-details {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .content-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 3px;
-            color: var(--text-primary);
-        }
-
-        .content-desc {
-            color: var(--text-secondary);
-            font-size: 0.85em;
-            line-height: 1.4;
-        }
-
-        .content-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 5px;
-            font-size: 0.75em;
-            color: var(--text-secondary);
-        }
-
-        .content-stats {
-            text-align: right;
-            flex-shrink: 0;
-            margin-left: 15px;
-        }
-
-        .view-count {
-            font-size: 0.9em;
-            font-weight: 600;
-            color: var(--accent-primary);
-        }
-
-        .content-status {
-            font-size: 0.75em;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        /* 即將推出 */
-        .coming-soon-section {
-            background: var(--bg-card);
-            border: 2px dashed var(--border-color);
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .coming-soon-icon {
-            font-size: 2.5em;
-            margin-bottom: 18px;
-            opacity: 0.6;
-        }
-
-        .coming-soon-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-
-        .coming-soon-desc {
-            color: var(--text-secondary);
-            max-width: 480px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-size: 0.95em;
-        }
-
         /* 載入動畫 */
         .loading {
             display: inline-block;
@@ -365,6 +490,19 @@
             .categories-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .featured-item,
+            .content-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .content-stats {
+                align-self: stretch;
+                text-align: left;
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 768px) {
@@ -380,31 +518,19 @@
                 font-size: 1.8em;
             }
 
-            .categories-grid {
-                grid-template-columns: 1fr;
-                gap: 18px;
-            }
-
-            .category-header,
-            .content-item {
-                padding: 15px 20px;
-            }
-
-            .content-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .content-stats {
-                align-self: stretch;
-                text-align: left;
-                margin-left: 0;
-            }
-
             .stats-section {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
+            }
+            
+            .page-navigation {
+                padding: 12px 15px;
+                gap: 8px;
+            }
+            
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.85em;
             }
         }
 
@@ -428,6 +554,15 @@
                 <a href="../index.html">首頁</a> / 學習
             </div>
             
+            <!-- 頁面導航 -->
+            <nav class="page-navigation">
+                <a href="../index.html" class="nav-link">🏠 首頁</a>
+                <a href="index.html" class="nav-link active">📚 學習</a>
+                <a href="../Career/index.html" class="nav-link">💼 職涯</a>
+                <a href="../Travel/index.html" class="nav-link">🌍 旅遊</a>
+                <a href="../Others/index.html" class="nav-link">💭 雜事分享</a>
+            </nav>
+            
             <h1 class="page-title">學習</h1>
             <p class="page-subtitle">
                 分享我認為值得學習的觀念與資源<br>
@@ -438,12 +573,16 @@
         <!-- 統計數據 -->
         <section class="stats-section">
             <div class="stat-card">
-                <span class="stat-number" id="total-content">2</span>
+                <span class="stat-number" id="total-content">
+                    <span class="loading"></span>
+                </span>
                 <div class="stat-label">內容總數</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="total-categories">3</span>
-                <div class="stat-label">主題分類</div>
+                <span class="stat-number" id="completed-projects">
+                    <span class="loading"></span>
+                </span>
+                <div class="stat-label">已完成專案</div>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="total-views">
@@ -454,6 +593,30 @@
             <div class="stat-card">
                 <span class="stat-number" id="last-updated">2025</span>
                 <div class="stat-label">最後更新</div>
+            </div>
+        </section>
+
+        <!-- 熱門/最新專案 -->
+        <section class="featured-section">
+            <div class="featured-header">
+                <h2 class="featured-title">🔥 熱門專案</h2>
+                <span class="featured-badge">HOT</span>
+            </div>
+            <div class="featured-list" id="featured-projects">
+                <!-- 動態載入熱門專案 -->
+                <div class="featured-item">
+                    <div class="project-rank rank-1">1</div>
+                    <div class="content-details">
+                        <div class="content-title">載入中...</div>
+                        <div class="content-desc">正在載入熱門專案數據</div>
+                        <div class="content-meta">
+                            <span class="status-badge status-completed">載入中</span>
+                        </div>
+                    </div>
+                    <div class="content-stats">
+                        <div class="view-count"><span class="loading"></span></div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -469,44 +632,8 @@
                             <p>深度技術學習與實踐</p>
                         </div>
                     </div>
-                    <div class="content-list">
-                        <a href="../c-pointer-tutorial/index.html" class="content-item" target="_blank" onclick="incrementViewCount('c-pointer')">
-                            <div class="content-icon">🔗</div>
-                            <div class="content-details">
-                                <div class="content-title">C語言指標完整教學</div>
-                                <div class="content-desc">從基礎到進階，完整掌握指標精髓</div>
-                                <div class="content-meta">
-                                    <span>📅 2025.08</span>
-                                    <span>📚 18章節</span>
-                                    <span>🎯 初級-進階</span>
-                                </div>
-                            </div>
-                            <div class="content-stats">
-                                <div class="view-count" id="c-pointer-views">
-                                    <span class="loading"></span>
-                                </div>
-                                <div class="content-status">已完成</div>
-                            </div>
-                        </a>
-
-                        <a href="./dataStructure%20in%20C/" class="content-item" onclick="incrementViewCount('data-structure')">
-                            <div class="content-icon">📊</div>
-                            <div class="content-details">
-                                <div class="content-title">Data Structure in C</div>
-                                <div class="content-desc">C 語言資料結構學習筆記與實作範例</div>
-                                <div class="content-meta">
-                                    <span>📅 2025.08</span>
-                                    <span>📚 進行中</span>
-                                    <span>🎯 中級</span>
-                                </div>
-                            </div>
-                            <div class="content-stats">
-                                <div class="view-count" id="data-structure-views">
-                                    <span class="loading"></span>
-                                </div>
-                                <div class="content-status">進行中</div>
-                            </div>
-                        </a>
+                    <div class="content-list" id="programming-projects">
+                        <!-- 動態載入程式技術專案 -->
                     </div>
                 </div>
 
@@ -526,12 +653,9 @@
                                 <div class="content-title">股市投資基礎觀念</div>
                                 <div class="content-desc">價值投資與技術分析入門</div>
                                 <div class="content-meta">
-                                    <span>📅 規劃中</span>
-                                    <span>📚 預計12章節</span>
+                                    <span class="status-badge status-planned">規劃中</span>
+                                    <span>📅 2025 Q2</span>
                                 </div>
-                            </div>
-                            <div class="content-stats">
-                                <div class="content-status">準備中</div>
                             </div>
                         </div>
                     </div>
@@ -553,28 +677,14 @@
                                 <div class="content-title">街頭攝影心得</div>
                                 <div class="content-desc">構圖、光線與瞬間捕捉</div>
                                 <div class="content-meta">
-                                    <span>📅 規劃中</span>
-                                    <span>📚 攝影作品集</span>
+                                    <span class="status-badge status-planned">構思中</span>
+                                    <span>📅 2025 Q3</span>
                                 </div>
-                            </div>
-                            <div class="content-stats">
-                                <div class="content-status">構思中</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- 即將推出 -->
-        <section class="coming-soon-section">
-            <div class="coming-soon-icon">✨</div>
-            <h3 class="coming-soon-title">持續探索，持續分享</h3>
-            <p class="coming-soon-desc">
-                學習是一個持續的過程，我會不斷發掘值得分享的觀念與資源。
-                無論是技術深度、投資智慧、藝術美學，
-                只要是我認為有價值的內容，都會在這裡與您分享。
-            </p>
         </section>
     </div>
 
@@ -599,130 +709,67 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 內容數據
-        const contentData = {
-            'c-pointer': {
-                views: 0,
+        // 專案數據配置
+        const projectsData = {
+            'c-pointer-tutorial': {
+                title: 'C語言指標完整教學',
+                description: '從基礎到進階，完整掌握指標精髓',
                 category: 'programming',
                 status: 'completed',
+                chapters: 18,
                 publishDate: '2025-08',
-                url: 'https://yehchuntin.github.io/c-pointer-tutorial/'
+                estimatedTime: '8-12小時',
+                difficulty: '初級-進階',
+                url: './c-pointer-tutorial/',
+                featured: true,
+                rank: 1
             },
-            'data-structure': {
-                views: 0,
+            'data-structure-in-c': {
+                title: 'Data Structure in C',
+                description: 'C 語言資料結構學習筆記與實作範例',
                 category: 'programming',
                 status: 'progress',
+                chapters: 0,
                 publishDate: '2025-08',
-                url: './dataStructure%20in%20C/'
+                estimatedTime: '進行中',
+                difficulty: '中級',
+                url: null, // 進行中不可點擊
+                featured: true,
+                rank: 2
             }
+            // 未來可以添加更多專案...
         };
 
-        // 獲取計數器值
-        async function getCounterValue(key) {
+        // 獲取觀看次數
+        async function getViewCount(projectId) {
             try {
-                const counterRef = ref(database, `counters/${key}`);
-                const snapshot = await get(counterRef);
+                const snapshot = await get(ref(database, `counters/content_${projectId}`));
                 return snapshot.exists() ? snapshot.val() : 0;
             } catch (error) {
-                console.error('Failed to get counter value:', error);
-                // 回退到本地儲存
-                return parseInt(localStorage.getItem(`fallback_${key}`) || '0');
-            }
-        }
-
-        // 增加計數器值（使用事務確保準確性）
-        async function incrementCounter(key) {
-            try {
-                const counterRef = ref(database, `counters/${key}`);
-                const result = await runTransaction(counterRef, (currentValue) => {
-                    return (currentValue || 0) + 1;
-                });
-                
-                // 同時更新本地備份
-                localStorage.setItem(`fallback_${key}`, result.snapshot.val().toString());
-                
-                return result.snapshot.val();
-            } catch (error) {
-                console.error('Failed to increment counter:', error);
-                // 如果 Firebase 失敗，使用本地儲存作為備份
-                const currentValue = parseInt(localStorage.getItem(`fallback_${key}`) || '0');
-                const newValue = currentValue + 1;
-                localStorage.setItem(`fallback_${key}`, newValue.toString());
-                return newValue;
+                console.error('Failed to get view count:', error);
+                return parseInt(localStorage.getItem(`fallback_content_${projectId}`) || '0');
             }
         }
 
         // 增加觀看次數
-        async function incrementViewCount(contentId) {
-            if (contentData[contentId]) {
-                const newCount = await incrementCounter(`content_${contentId}`);
-                const viewElement = document.getElementById(`${contentId}-views`);
-                if (viewElement) {
-                    viewElement.textContent = `${formatNumber(newCount)} 次觀看`;
-                }
-                
-                // 更新總觀看次數
-                await updateTotalViews();
-            }
-        }
-
-        // 增加頁面觀看次數
-        async function incrementPageViews() {
-            const newCount = await incrementCounter('page_learning');
-            await updateTotalViews();
-            return newCount;
-        }
-
-        // 更新總觀看次數顯示
-        async function updateTotalViews() {
+        async function incrementViewCount(projectId) {
             try {
-                const pageViews = await getCounterValue('page_learning');
-                const cPointerViews = await getCounterValue('content_c-pointer');
-                const dataStructureViews = await getCounterValue('content_data-structure');
-                const totalViews = pageViews + cPointerViews + dataStructureViews;
-                
-                const totalViewsElement = document.getElementById('total-views');
-                if (totalViewsElement) {
-                    totalViewsElement.textContent = formatNumber(totalViews);
-                }
-            } catch (error) {
-                console.error('Failed to update total views:', error);
-                const totalViewsElement = document.getElementById('total-views');
-                if (totalViewsElement) {
-                    totalViewsElement.textContent = '0';
-                }
-            }
-        }
-
-        // 載入所有觀看次數
-        async function loadViewCounts() {
-            try {
-                // 載入內容觀看次數
-                for (const contentId of Object.keys(contentData)) {
-                    const viewCount = await getCounterValue(`content_${contentId}`);
-                    const viewElement = document.getElementById(`${contentId}-views`);
-                    if (viewElement) {
-                        viewElement.textContent = `${formatNumber(viewCount)} 次觀看`;
-                    }
-                }
-                
-                // 載入總觀看次數
-                await updateTotalViews();
-                
-            } catch (error) {
-                console.error('Failed to load view counts:', error);
-                // 如果載入失敗，顯示預設值
-                document.getElementById('total-views').textContent = '0';
-                Object.keys(contentData).forEach(contentId => {
-                    const viewElement = document.getElementById(`${contentId}-views`);
-                    if (viewElement) {
-                        viewElement.textContent = '0 次觀看';
-                    }
+                const counterRef = ref(database, `counters/content_${projectId}`);
+                const result = await runTransaction(counterRef, (currentValue) => {
+                    return (currentValue || 0) + 1;
                 });
+                localStorage.setItem(`fallback_content_${projectId}`, result.snapshot.val().toString());
+                return result.snapshot.val();
+            } catch (error) {
+                console.error('Failed to increment counter:', error);
+                const currentValue = parseInt(localStorage.getItem(`fallback_content_${projectId}`) || '0');
+                const newValue = currentValue + 1;
+                localStorage.setItem(`fallback_content_${projectId}`, newValue.toString());
+                return newValue;
             }
         }
 
-        // 格式化數字顯示
+        // 格式化數字
         function formatNumber(num) {
             if (num >= 1000000) {
                 return (num / 1000000).toFixed(1) + 'M';
@@ -732,11 +779,142 @@
             return num.toString();
         }
 
-        // 檢查是否為新訪客（24小時內不重複計算）
+        // 載入熱門專案
+        async function loadFeaturedProjects() {
+            const featuredContainer = document.getElementById('featured-projects');
+            
+            // 獲取有 featured 標記的專案，按 rank 排序
+            const featuredProjects = Object.entries(projectsData)
+                .filter(([id, project]) => project.featured)
+                .sort(([, a], [, b]) => a.rank - b.rank);
+
+            let html = '';
+            
+            for (const [projectId, project] of featuredProjects) {
+                const views = await getViewCount(projectId);
+                const statusClass = project.status === 'completed' ? 'status-completed' : 
+                                   project.status === 'progress' ? 'status-progress' : 'status-planned';
+                const statusText = project.status === 'completed' ? '已完成' : 
+                                  project.status === 'progress' ? '進行中' : '規劃中';
+                
+                const isClickable = project.status === 'completed' && project.url;
+                const itemClass = isClickable ? 'featured-item' : 'featured-item disabled';
+                const clickHandler = isClickable ? `onclick="handleProjectClick('${projectId}')"` : '';
+                
+                html += `
+                    <div class="${itemClass}" ${clickHandler}>
+                        <div class="project-rank rank-${project.rank}">${project.rank}</div>
+                        <div class="content-details">
+                            <div class="content-title">${project.title}</div>
+                            <div class="content-desc">${project.description}</div>
+                            <div class="content-meta">
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <span>📅 ${project.publishDate}</span>
+                                ${project.chapters > 0 ? `<span>📚 ${project.chapters}章節</span>` : ''}
+                                <span>⏱️ ${project.estimatedTime}</span>
+                                <span>🎯 ${project.difficulty}</span>
+                            </div>
+                        </div>
+                        <div class="content-stats">
+                            <div class="view-count">${formatNumber(views)} 次觀看</div>
+                            ${project.status === 'completed' && Date.now() - new Date(project.publishDate + '-01').getTime() < 30 * 24 * 60 * 60 * 1000 ? '<div class="update-badge">🆕 最新</div>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            featuredContainer.innerHTML = html;
+        }
+
+        // 載入程式技術專案
+        async function loadProgrammingProjects() {
+            const programmingContainer = document.getElementById('programming-projects');
+            
+            // 獲取程式技術分類的專案
+            const programmingProjects = Object.entries(projectsData)
+                .filter(([id, project]) => project.category === 'programming');
+
+            let html = '';
+            
+            for (const [projectId, project] of programmingProjects) {
+                const views = await getViewCount(projectId);
+                const statusClass = project.status === 'completed' ? 'status-completed' : 
+                                   project.status === 'progress' ? 'status-progress' : 'status-planned';
+                const statusText = project.status === 'completed' ? '已完成' : 
+                                  project.status === 'progress' ? '進行中' : '規劃中';
+                
+                const isClickable = project.status === 'completed' && project.url;
+                const itemClass = isClickable ? 'content-item' : 'content-item disabled';
+                const clickHandler = isClickable ? `onclick="handleProjectClick('${projectId}')"` : '';
+                
+                html += `
+                    <div class="${itemClass}" ${clickHandler}>
+                        <div class="content-icon">${project.title.includes('指標') ? '🔗' : '📊'}</div>
+                        <div class="content-details">
+                            <div class="content-title">${project.title}</div>
+                            <div class="content-desc">${project.description}</div>
+                            <div class="content-meta">
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <span>📅 ${project.publishDate}</span>
+                                ${project.chapters > 0 ? `<span>📚 ${project.chapters}章節</span>` : ''}
+                                <span>🎯 ${project.difficulty}</span>
+                            </div>
+                        </div>
+                        <div class="content-stats">
+                            <div class="view-count">${formatNumber(views)} 次觀看</div>
+                            <div class="content-status">${statusText}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            programmingContainer.innerHTML = html;
+        }
+
+        // 更新統計數據
+        async function updateStatistics() {
+            // 計算總內容數（包含所有狀態的專案）
+            const totalContent = Object.keys(projectsData).length;
+            document.getElementById('total-content').textContent = totalContent;
+
+            // 計算已完成專案數
+            const completedProjects = Object.values(projectsData)
+                .filter(project => project.status === 'completed').length;
+            document.getElementById('completed-projects').textContent = completedProjects;
+
+            // 計算總觀看次數
+            let totalViews = 0;
+            for (const projectId of Object.keys(projectsData)) {
+                const views = await getViewCount(projectId);
+                totalViews += views;
+            }
+            document.getElementById('total-views').textContent = formatNumber(totalViews);
+
+            // 設定最後更新時間
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('last-updated').textContent = `${year}.${month}`;
+        }
+
+        // 處理專案點擊
+        window.handleProjectClick = async function(projectId) {
+            const project = projectsData[projectId];
+            
+            if (project && project.status === 'completed' && project.url) {
+                // 增加觀看次數
+                await incrementViewCount(projectId);
+                
+                // 跳轉到專案頁面
+                window.location.href = project.url;
+            }
+        };
+
+        // 檢查是否為新訪客（24小時內不重複計算頁面瀏覽）
         function shouldCountPageView() {
             const lastVisit = localStorage.getItem('lastLearningPageVisit');
             const now = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000; // 24小時
+            const twentyFourHours = 24 * 60 * 60 * 1000;
             
             if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
                 localStorage.setItem('lastLearningPageVisit', now.toString());
@@ -745,19 +923,45 @@
             return false;
         }
 
-        // 將函數添加到全域作用域，讓 HTML 的 onclick 可以使用
-        window.incrementViewCount = incrementViewCount;
-        window.formatNumber = formatNumber;
+        // 增加頁面觀看次數
+        async function incrementPageViews() {
+            try {
+                const counterRef = ref(database, 'counters/page_learning');
+                const result = await runTransaction(counterRef, (currentValue) => {
+                    return (currentValue || 0) + 1;
+                });
+                return result.snapshot.val();
+            } catch (error) {
+                console.error('Failed to increment page views:', error);
+                return 0;
+            }
+        }
 
-        // 初始化
+        // 初始化頁面
         document.addEventListener('DOMContentLoaded', async function() {
-            // 載入現有的觀看次數
-            await loadViewCounts();
-            
+            // 載入所有數據
+            await Promise.all([
+                loadFeaturedProjects(),
+                loadProgrammingProjects(),
+                updateStatistics()
+            ]);
+
             // 如果是新訪客，增加頁面觀看次數
             if (shouldCountPageView()) {
                 await incrementPageViews();
             }
+
+            // 添加進場動畫
+            const elements = document.querySelectorAll('.stat-card, .featured-section, .category-section');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
         });
     </script>
 
@@ -792,53 +996,10 @@
             }
         }
 
-        // 設定最後更新時間
-        function setLastUpdated() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const lastUpdatedElement = document.getElementById('last-updated');
-            if (lastUpdatedElement) {
-                lastUpdatedElement.textContent = `${year}.${month}`;
-            }
-        }
-
-        // 更新其他統計數據
-        function updateOtherStats() {
-            // 更新內容總數（計算已完成和進行中的）
-            const totalContentElement = document.getElementById('total-content');
-            if (totalContentElement) {
-                const completedContent = Object.values(contentData).filter(item => 
-                    item.status === 'completed' || item.status === 'progress'
-                ).length;
-                totalContentElement.textContent = completedContent.toString();
-            }
-
-            // 更新分類總數
-            const totalCategoriesElement = document.getElementById('total-categories');
-            if (totalCategoriesElement) {
-                totalCategoriesElement.textContent = '3';
-            }
-        }
-
-        // 初始化非 Firebase 相關功能
+        // 初始化主題
         document.addEventListener('DOMContentLoaded', function() {
             loadTheme();
-            setLastUpdated();
-            updateOtherStats();
-            
-            // 添加進場動畫
-            const elements = document.querySelectorAll('.stat-card, .category-section, .coming-soon-section');
-            elements.forEach((element, index) => {
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    element.style.transition = 'all 0.6s ease';
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
         });
     </script>
 </body>
-</html>}
+</html>
