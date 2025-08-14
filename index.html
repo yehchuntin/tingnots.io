@@ -1,4 +1,15 @@
-<!DOCTYPE html>
+<!-- 左右側邊欄廣告 - 從學習區塊開始 -->
+            <div class="side-ad side-ad-left">
+                左側廣告<br>
+                (160x600)<br>
+                從學習區塊開始往下
+            </div>
+            
+            <div class="side-ad side-ad-right">
+                右側廣告<br>
+                (160x600)<br>
+                從學習區塊開始往下
+            </div><!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -235,33 +246,17 @@
             border: 2px dashed var(--border-color);
             border-radius: 12px;
             padding: 35px;
-            transition: all 0.2s ease;
-            display: block;
-            min-height: 280px;
-        }
-
-        .ad-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 4px 12px var(--shadow-medium);
-            transform: translateY(-2px);
-        }
-
-        .ad-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            color: var(--text-muted);
             text-align: center;
+            color: var(--text-muted);
             font-size: 0.9rem;
             line-height: 1.5;
+            min-height: 280px;
         }
 
-        /* 側邊廣告 - 從分類區塊開始 */
-        .side-ads {
-            position: relative;
-        }
-
+        /* 側邊廣告 - 簡化版本 */
         .side-ad {
             position: fixed;
             width: 160px;
@@ -276,39 +271,19 @@
             justify-content: center;
             text-align: center;
             z-index: 10;
-            opacity: 0;
-            animation: fadeInSideAd 1s ease-in-out 2s forwards;
+            line-height: 1.4;
         }
 
         .side-ad-left {
             left: 20px;
-            top: calc(var(--categories-top) + 100px);
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .side-ad-right {
             right: 20px;
-            top: calc(var(--categories-top) + 100px);
-        }
-
-        /* 計算分類區塊的位置 */
-        :root {
-            --categories-top: 600px; /* 大約在分類區塊的位置 */
-        }
-
-        @keyframes fadeInSideAd {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 0.8;
-                transform: translateX(0);
-            }
-        }
-
-        .side-ad:hover {
-            opacity: 1;
-            border-color: var(--accent-primary);
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .category-card {
