@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TingNotes - 學習記錄與思考分享</title>
     <style>
+        :root {
+            /* 淺色模式 */
+             --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --accent-primary: #3498db;
+            --accent-secondary: #2980b9;
+            --border-color: #e9ecef;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="dark"] {
+            /* 深色模式 */
+            /* 深色模式 */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d3748;
+            --bg-card: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #a0aec0;
+            --accent-primary: #4299e1;
+            --accent-secondary: #3182ce;
+            --border-color: #4a5568;
+            --shadow-light: rgba(0, 0, 0, 0.3);
+            --shadow-medium: rgba(0, 0, 0, 0.4);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,8 +43,9 @@
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            color: #2c3e50;
-            background: #ffffff;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -26,13 +56,13 @@
 
         /* Header & Navigation */
         header {
-            background: #ffffff;
-            border-bottom: 1px solid #e1e8ed;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
             padding: 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 4px var(--shadow-light);
         }
 
         nav {
@@ -45,7 +75,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-primary);
             text-decoration: none;
         }
 
@@ -53,10 +83,11 @@
             display: flex;
             list-style: none;
             gap: 32px;
+            align-items: center;
         }
 
         .nav-links a {
-            color: #64748b;
+            color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -65,7 +96,7 @@
         }
 
         .nav-links a:hover {
-            color: #2c3e50;
+            color: var(--text-primary);
         }
 
         .nav-links a::after {
@@ -75,12 +106,35 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #3b82f6;
+            background: var(--accent-primary);
             transition: width 0.2s ease;
         }
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        /* 主題切換按鈕 */
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
         }
 
         /* Main Content */
@@ -99,31 +153,31 @@
         .hero h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 20px;
             line-height: 1.2;
         }
 
         .hero-subtitle {
             font-size: 1.2rem;
-            color: #64748b;
+            color: var(--text-secondary);
             margin-bottom: 30px;
             line-height: 1.6;
         }
 
         /* About Section */
         .about-section {
-            background: #f8fafc;
+            background: var(--bg-secondary);
             border-radius: 12px;
             padding: 50px 40px;
             margin-bottom: 60px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
         }
 
         .about-section h2 {
             font-size: 1.8rem;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 25px;
             text-align: center;
         }
@@ -133,7 +187,7 @@
             margin: 0 auto;
             font-size: 1.05rem;
             line-height: 1.8;
-            color: #475569;
+            color: var(--text-secondary);
         }
 
         .about-content p {
@@ -149,8 +203,8 @@
         }
 
         .category-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 35px;
             transition: all 0.2s ease;
@@ -160,15 +214,15 @@
         }
 
         .category-card:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px var(--shadow-medium);
             transform: translateY(-2px);
         }
 
         .category-icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -180,26 +234,26 @@
         .category-card h3 {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
 
         .category-card p {
-            color: #64748b;
+            color: var(--text-secondary);
             line-height: 1.6;
             margin-bottom: 15px;
         }
 
         .category-meta {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-style: italic;
         }
 
         /* Current Projects */
         .projects-section {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 40px;
             margin-bottom: 60px;
@@ -208,7 +262,7 @@
         .projects-section h2 {
             font-size: 1.6rem;
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 30px;
         }
 
@@ -216,7 +270,7 @@
             display: flex;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .project-item:last-child {
@@ -229,17 +283,17 @@
 
         .project-name {
             font-weight: 600;
-            color: #1e293b;
+            color: var(--text-primary);
             margin-bottom: 5px;
         }
 
         .project-desc {
-            color: #64748b;
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
         .project-link {
-            color: #3b82f6;
+            color: var(--accent-primary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
@@ -251,14 +305,14 @@
 
         /* Footer */
         footer {
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid var(--border-color);
             padding: 40px 0;
             text-align: center;
-            background: #f8fafc;
+            background: var(--bg-secondary);
         }
 
         .footer-content {
-            color: #64748b;
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
@@ -267,7 +321,7 @@
         }
 
         .contact-info a {
-            color: #3b82f6;
+            color: var(--accent-primary);
             text-decoration: none;
         }
 
@@ -275,12 +329,87 @@
             text-decoration: underline;
         }
 
-        /* Responsive Design */
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Mobile menu styles */
         @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
             .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-primary);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 6px var(--shadow-light);
+                border-top: 1px solid var(--border-color);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                gap: 0;
+            }
+
+            .nav-links.mobile-active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links li {
+                margin-bottom: 15px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--border-color);
+                text-align: center;
+            }
+
+            .nav-links a::after {
                 display: none;
             }
-            
+
+            .theme-toggle {
+                margin-top: 10px;
+                align-self: center;
+            }
+
             .hero h1 {
                 font-size: 2rem;
             }
@@ -302,56 +431,30 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-        }
 
-        /* Mobile Navigation */
-        .mobile-menu-btn {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .mobile-menu-btn span {
-            width: 24px;
-            height: 2px;
-            background: #64748b;
-            border-radius: 2px;
-            transition: 0.2s;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: flex;
-            }
-        }
-
-        /* Mobile menu styles */
-        @media (max-width: 768px) {
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
+            .project-item {
                 flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 0;
             }
+        }
 
-            .nav-links.mobile-active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-            }
+        /* 平滑捲動 */
+        html {
+            scroll-behavior: smooth;
+        }
 
-            .nav-links li {
-                margin-bottom: 10px;
-            }
+        /* 載入動畫 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -362,22 +465,27 @@
                 <a href="/" class="logo">TingNotes</a>
                 <ul class="nav-links">
                     <li><a href="Learning/index.html">學習</a></li>
-                    <li><a href="./career/">職涯</a></li>
-                    <li><a href="./thoughts/">雜事分享</a></li>
-                    <li><a href="./about/">關於</a></li>
+                    <li><a href="Career/index.html">職涯</a></li>
+                    <li><a href="Travel/index.html">旅遊</a></li>
+                    <li><a href="Others/index.html">雜事分享</a></li>
+                    <li>
+                        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
+                            <span id="theme-icon">🌙</span>
+                        </button>
+                    </li>
                 </ul>
-                <div class="mobile-menu-btn">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
         <div class="container">
-            <section class="hero">
+            <section class="hero fade-in">
                 <h1>記錄學習，分享思考</h1>
                 <p class="hero-subtitle">
                     這裡是我的個人空間，記錄技術學習、職涯規劃與生活思考。<br>
@@ -385,7 +493,7 @@
                 </p>
             </section>
 
-            <section class="about-section">
+            <section class="about-section fade-in">
                 <h2>為什麼建立這個網站？</h2>
                 <div class="about-content">
                     <p>
@@ -405,29 +513,36 @@
             </section>
 
             <section class="categories">
-                <a href="Learning/index.html" class="category-card">
+                <a href="Learning/index.html" class="category-card fade-in">
                     <div class="category-icon">📚</div>
                     <h3>學習</h3>
                     <p>程式語言、技術框架、演算法等學習筆記與心得分享。包含專案開發過程、問題解決經驗、以及技術文章翻譯與導讀。</p>
                     <div class="category-meta">持續更新中 • 技術深度探討</div>
                 </a>
 
-                <a href="./career/" class="category-card">
+                <a href="Career/index.html" class="category-card fade-in">
                     <div class="category-icon">🎯</div>
                     <h3>職涯</h3>
                     <p>實習申請經驗、面試準備、職業規劃思考。記錄從學生到職場的轉換過程，以及對未來發展的規劃與反思。</p>
                     <div class="category-meta">規劃階段 • 經驗分享</div>
                 </a>
 
-                <a href="./thoughts/" class="category-card">
+                <a href="Travel/index.html" class="category-card fade-in">
+                    <div class="category-icon">✈️</div>
+                    <h3>旅遊</h3>
+                    <p>旅行經歷分享、景點推薦、文化觀察與旅途中的思考感悟。記錄探索世界的足跡與心境變化。</p>
+                    <div class="category-meta">探索世界 • 文化體驗</div>
+                </a>
+
+                <a href="Others/index.html" class="category-card fade-in">
                     <div class="category-icon">💭</div>
                     <h3>雜事分享</h3>
-                    <p>日常生活感悟、讀書筆記、時事觀察與個人思考。不局限於技術領域，記錄生活中值得思考的各種片段。</p>
+                    <p>日常生活感悟、讀書筆記、時事觀察與個人思考。不局限於特定領域，記錄生活中值得思考的各種片段。</p>
                     <div class="category-meta">不定期更新 • 多元思考</div>
                 </a>
             </section>
 
-            <section class="projects-section">
+            <section class="projects-section fade-in">
                 <h2>進行中的專案</h2>
                 <div class="project-item">
                     <div class="project-info">
@@ -466,6 +581,41 @@
     </footer>
 
     <script>
+        // 深淺色模式切換
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // 載入儲存的主題
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const themeIcon = document.getElementById('theme-icon');
+            
+            document.body.setAttribute('data-theme', savedTheme);
+            themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // 手機選單切換
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            navLinks.classList.toggle('mobile-active');
+            mobileMenuBtn.classList.toggle('active');
+        }
+
         // 平滑滾動
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -485,26 +635,56 @@
         document.querySelectorAll('.nav-links a').forEach(link => {
             const linkPath = link.getAttribute('href');
             if (linkPath === currentPath || currentPath.startsWith(linkPath.replace('./', '/'))) {
-                link.style.color = '#2c3e50';
+                link.style.color = 'var(--text-primary)';
                 link.style.fontWeight = '600';
             }
         });
 
-        // 響應式導航
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('mobile-active');
-            });
-        }
+        // 關閉手機選單當點擊其他地方或選單項目時
+        document.addEventListener('click', function(e) {
+            const navLinks = document.querySelector('.nav-links');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                navLinks.classList.remove('mobile-active');
+                mobileMenuBtn.classList.remove('active');
+            }
+        });
 
         // 關閉手機選單當點擊連結時
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
                 navLinks.classList.remove('mobile-active');
+                mobileMenuBtn.classList.remove('active');
             });
+        });
+
+        // 進場動畫
+        function initAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            initAnimations();
         });
     </script>
 </body>
