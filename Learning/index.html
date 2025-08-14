@@ -172,6 +172,18 @@
             font-weight: 500;
         }
 
+        /* AdSense 廣告位置 */
+        .ad-banner {
+            background: var(--bg-secondary);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
         /* 分類區塊 */
         .categories-section {
             margin-bottom: 40px;
@@ -432,6 +444,12 @@
             </p>
         </header>
 
+        <!-- AdSense 廣告位置 1: Header 下方 -->
+        <div class="ad-banner">
+            <!-- Google AdSense 橫幅廣告 (728x90 或 320x50) -->
+            廣告位置 1 - Header 下方橫幅
+        </div>
+
         <!-- 統計數據 -->
         <section class="stats-section">
             <div class="stat-card">
@@ -453,6 +471,12 @@
                 <div class="stat-label">最後更新</div>
             </div>
         </section>
+
+        <!-- AdSense 廣告位置 2: 統計和分類之間 -->
+        <div class="ad-banner">
+            <!-- Google AdSense 方形廣告 (300x250) -->
+            廣告位置 2 - 統計和分類之間
+        </div>
 
         <!-- 內容分類 -->
         <section class="categories-section">
@@ -483,6 +507,25 @@
                                     <span class="loading"></span>
                                 </div>
                                 <div class="content-status">已完成</div>
+                            </div>
+                        </a>
+
+                        <a href="./dataStructure%20in%20C/" class="content-item" onclick="incrementViewCount('data-structure')">
+                            <div class="content-icon">📊</div>
+                            <div class="content-details">
+                                <div class="content-title">Data Structure in C</div>
+                                <div class="content-desc">C 語言資料結構學習筆記與實作範例</div>
+                                <div class="content-meta">
+                                    <span>📅 2025.08</span>
+                                    <span>📚 進行中</span>
+                                    <span>🎯 中級</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="view-count" id="data-structure-views">
+                                    <span class="loading"></span>
+                                </div>
+                                <div class="content-status">進行中</div>
                             </div>
                         </a>
                     </div>
@@ -544,6 +587,12 @@
             </div>
         </section>
 
+        <!-- AdSense 廣告位置 3: 分類和即將推出之間 -->
+        <div class="ad-banner">
+            <!-- Google AdSense 橫幅廣告 (728x90) -->
+            廣告位置 3 - 分類和即將推出之間
+        </div>
+
         <!-- 即將推出 -->
         <section class="coming-soon-section">
             <div class="coming-soon-icon">✨</div>
@@ -554,13 +603,19 @@
                 只要是我認為有價值的內容，都會在這裡與您分享。
             </p>
         </section>
+
+        <!-- AdSense 廣告位置 4: 底部 -->
+        <div class="ad-banner">
+            <!-- Google AdSense 方形廣告 (300x250) -->
+            廣告位置 4 - 頁面底部
+        </div>
     </div>
 
     <!-- Firebase SDK -->
     <script type="module">
         // Firebase 配置
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, get, set, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, get, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbEhPO8lUDT4nCPmfw1fZg3t2eGO6JUaI",
@@ -585,6 +640,13 @@
                 status: 'completed',
                 publishDate: '2025-08',
                 url: 'https://yehchuntin.github.io/c-pointer-tutorial/'
+            },
+            'data-structure': {
+                views: 0,
+                category: 'programming',
+                status: 'progress',
+                publishDate: '2025-08',
+                url: './dataStructure%20in%20C/'
             }
         };
 
@@ -648,8 +710,9 @@
         async function updateTotalViews() {
             try {
                 const pageViews = await getCounterValue('page_learning');
-                const contentViews = await getCounterValue('content_c-pointer');
-                const totalViews = pageViews + contentViews;
+                const cPointerViews = await getCounterValue('content_c-pointer');
+                const dataStructureViews = await getCounterValue('content_data-structure');
+                const totalViews = pageViews + cPointerViews + dataStructureViews;
                 
                 const totalViewsElement = document.getElementById('total-views');
                 if (totalViewsElement) {
@@ -683,7 +746,12 @@
                 console.error('Failed to load view counts:', error);
                 // 如果載入失敗，顯示預設值
                 document.getElementById('total-views').textContent = '0';
-                document.getElementById('c-pointer-views').textContent = '0 次觀看';
+                Object.keys(contentData).forEach(contentId => {
+                    const viewElement = document.getElementById(`${contentId}-views`);
+                    if (viewElement) {
+                        viewElement.textContent = '0 次觀看';
+                    }
+                });
             }
         }
 
@@ -770,10 +838,13 @@
 
         // 更新其他統計數據
         function updateOtherStats() {
-            // 更新內容總數（只計算已完成的）
+            // 更新內容總數（計算已完成和進行中的）
             const totalContentElement = document.getElementById('total-content');
             if (totalContentElement) {
-                totalContentElement.textContent = '1';
+                const completedContent = Object.values(contentData).filter(item => 
+                    item.status === 'completed' || item.status === 'progress'
+                ).length;
+                totalContentElement.textContent = completedContent.toString();
             }
 
             // 更新分類總數
