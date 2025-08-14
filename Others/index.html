@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雜事分享 | TingNotes - 生活思考與多元觀察</title>
+    <meta name="description" content="TingNotes 雜事分享專區 - 日常感悟、讀書筆記、時事觀察與個人思考">
+    
+    <style>
+        :root {
+            /* 淺色模式 */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --accent-primary: #8e44ad;
+            --accent-secondary: #9b59b6;
+            --border-color: #e9ecef;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --theme-btn-bg: rgba(0, 0, 0, 0.1);
+            --theme-btn-border: rgba(0, 0, 0, 0.2);
+            --theme-btn-icon: rgba(0, 0, 0, 0.7);
+        }
+
+        [data-theme="dark"] {
+            /* 深色模式 */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d3748;
+            --bg-card: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #a0aec0;
+            --accent-primary: #b794f6;
+            --accent-secondary: #9f7aea;
+            --border-color: #4a5568;
+            --shadow-light: rgba(0, 0, 0, 0.3);
+            --shadow-medium: rgba(0, 0, 0, 0.4);
+            --theme-btn-bg: rgba(255, 255, 255, 0.1);
+            --theme-btn-border: rgba(255, 255, 255, 0.3);
+            --theme-btn-icon: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--theme-btn-bg);
+            border: 2px solid var(--theme-btn-border);
+            color: var(--theme-btn-icon);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-primary);
+            background: var(--accent-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .theme-icon {
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* 統計區塊 */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-medium);
+        }
+
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--accent-primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* 分類區塊 */
+        .categories-section {
+            margin-bottom: 35px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 22px;
+        }
+
+        .category-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .category-header {
+            padding: 22px 28px 12px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            flex-shrink: 0;
+        }
+
+        .category-info h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .category-info p {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .content-list {
+            padding: 0;
+        }
+
+        .content-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 28px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .content-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-item:hover {
+            background: var(--bg-secondary);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .content-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .content-item.disabled:hover {
+            background: transparent;
+        }
+
+        .content-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .content-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: var(--text-primary);
+        }
+
+        .content-desc {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .content-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.75em;
+            color: var(--text-secondary);
+        }
+
+        .content-stats {
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .view-count {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .content-status {
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* 即將推出 */
+        .coming-soon-section {
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .coming-soon-icon {
+            font-size: 2.5em;
+            margin-bottom: 18px;
+            opacity: 0.6;
+        }
+
+        .coming-soon-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .coming-soon-desc {
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        /* 載入動畫 */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 968px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .page-title {
+                font-size: 1.8em;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .category-header,
+            .content-item {
+                padding: 15px 20px;
+            }
+
+            .content-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .content-stats {
+                align-self: stretch;
+                text-align: left;
+                margin-left: 0;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
+                <svg class="theme-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+            
+            <div class="breadcrumb">
+                <a href="../index.html">首頁</a> / 雜事分享
+            </div>
+            
+            <h1 class="page-title">雜事分享</h1>
+            <p class="page-subtitle">
+                生活中值得思考的各種片段<br>
+                記錄日常感悟、讀書心得與多元觀察
+            </p>
+        </header>
+
+        <!-- 統計數據 -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <span class="stat-number" id="total-posts">0</span>
+                <div class="stat-label">文章總數</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-topics">4</span>
+                <div class="stat-label">主題分類</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-views">
+                    <span class="loading"></span>
+                </span>
+                <div class="stat-label">總觀看次數</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="last-updated">2025</span>
+                <div class="stat-label">最後更新</div>
+            </div>
+        </section>
+
+        <!-- 內容分類 -->
+        <section class="categories-section">
+            <div class="categories-grid">
+                <!-- 生活感悟 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">🌟</div>
+                        <div class="category-info">
+                            <h3>生活感悟</h3>
+                            <p>日常生活的點滴思考</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <div class="content-item disabled">
+                            <div class="content-icon">☕</div>
+                            <div class="content-details">
+                                <div class="content-title">慢生活的藝術</div>
+                                <div class="content-desc">在快節奏的世界中，學會放慢腳步的智慧</div>
+                                <div class="content-meta">
+                                    <span>📅 思考中</span>
+                                    <span>🎯 生活哲學</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">思考中</div>
+                            </div>
+                        </div>
+
+                        <div class="content-item disabled">
+                            <div class="content-icon">🎨</div>
+                            <div class="content-details">
+                                <div class="content-title">創造力從何而來</div>
+                                <div class="content-desc">探討靈感的來源與培養創意思維的方法</div>
+                                <div class="content-meta">
+                                    <span>📅 構思中</span>
+                                    <span>🎯 心理學</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">構思中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 讀書筆記 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">📚</div>
+                        <div class="category-info">
+                            <h3>讀書筆記</h3>
+                            <p>閱讀心得與知識整理</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <div class="content-item disabled">
+                            <div class="content-icon">🧠</div>
+                            <div class="content-details">
+                                <div class="content-title">《思考，快與慢》讀後感</div>
+                                <div class="content-desc">理性與直覺的雙重思考系統解析</div>
+                                <div class="content-meta">
+                                    <span>📅 閱讀中</span>
+                                    <span>📖 心理學</span>
+                                    <span>👤 康納曼</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">閱讀中</div>
+                            </div>
+                        </div>
+
+                        <div class="content-item disabled">
+                            <div class="content-icon">🏛️</div>
+                            <div class="content-details">
+                                <div class="content-title">《人類大歷史》筆記</div>
+                                <div class="content-desc">從認知革命到人工智慧的文明發展軌跡</div>
+                                <div class="content-meta">
+                                    <span>📅 計劃中</span>
+                                    <span>📖 歷史</span>
+                                    <span>👤 哈拉瑞</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">計劃中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 時事觀察 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">🌐</div>
+                        <div class="category-info">
+                            <h3>時事觀察</h3>
+                            <p>社會現象與趨勢分析</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <div class="content-item disabled">
+                            <div class="content-icon">🤖</div>
+                            <div class="content-details">
+                                <div class="content-title">AI 時代的教育變革</div>
+                                <div class="content-desc">人工智慧如何重新定義學習與知識</div>
+                                <div class="content-meta">
+                                    <span>📅 觀察中</span>
+                                    <span>🎯 科技趨勢</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">觀察中</div>
+                            </div>
+                        </div>
+
+                        <div class="content-item disabled">
+                            <div class="content-icon">📱</div>
+                            <div class="content-details">
+                                <div class="content-title">數位原住民的世代差異</div>
+                                <div class="content-desc">不同世代對科技認知與使用習慣的差異</div>
+                                <div class="content-meta">
+                                    <span>📅 思考中</span>
+                                    <span>🎯 社會學</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">思考中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 個人反思 -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon">🪞</div>
+                        <div class="category-info">
+                            <h3>個人反思</h3>
+                            <p>內心對話與成長記錄</p>
+                        </div>
+                    </div>
+                    <div class="content-list">
+                        <div class="content-item disabled">
+                            <div class="content-icon">⚖️</div>
+                            <div class="content-details">
+                                <div class="content-title">平衡的藝術</div>
+                                <div class="content-desc">工作、學習與生活之間的平衡探索</div>
+                                <div class="content-meta">
+                                    <span>📅 反思中</span>
+                                    <span>🎯 自我管理</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">反思中</div>
+                            </div>
+                        </div>
+
+                        <div class="content-item disabled">
+                            <div class="content-icon">🎭</div>
+                            <div class="content-details">
+                                <div class="content-title">真實的自己</div>
+                                <div class="content-desc">在各種角色中尋找真正的自我認同</div>
+                                <div class="content-meta">
+                                    <span>📅 探索中</span>
+                                    <span>🎯 自我認知</span>
+                                </div>
+                            </div>
+                            <div class="content-stats">
+                                <div class="content-status">探索中</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 即將推出 -->
+        <section class="coming-soon-section">
+            <div class="coming-soon-icon">💭</div>
+            <h3 class="coming-soon-title">生活處處是學問</h3>
+            <p class="coming-soon-desc">
+                每一天都有值得思考的事物，每一個觀察都可能帶來新的視角。
+                我會用心記錄生活中的所思所想，與您分享這些或深刻或有趣的思考片段，
+                一起在平凡中發現不平凡的智慧。
+            </p>
+        </section>
+    </div>
+
+    <script>
+        // 深淺色模式切換
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // 載入儲存的主題
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const themeIcon = document.getElementById('theme-icon');
+            
+            document.body.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'dark') {
+                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
+            } else {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            }
+        }
+
+        // 設定最後更新時間
+        function setLastUpdated() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const lastUpdatedElement = document.getElementById('last-updated');
+            if (lastUpdatedElement) {
+                lastUpdatedElement.textContent = `${year}.${month}`;
+            }
+        }
+
+        // 更新統計數據
+        function updateStats() {
+            document.getElementById('total-posts').textContent = '0';
+            document.getElementById('total-topics').textContent = '4';
+            document.getElementById('total-views').textContent = '0';
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            setLastUpdated();
+            updateStats();
+            
+            // 添加進場動畫
+            const elements = document.querySelectorAll('.stat-card, .category-section, .coming-soon-section');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
