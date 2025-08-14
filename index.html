@@ -717,7 +717,7 @@
                 id: 'c-pointer',
                 name: 'C語言指標完整教學',
                 desc: 'C 語言指標概念教學專案，用清晰的範例和圖解幫助初學者理解指標機制',
-                url: '/c-pointer-tutorial/index.html',
+                url: './c-pointer-tutorial/',
                 category: 'learning',
                 status: '已完成'
             }
@@ -764,7 +764,7 @@
                 // 渲染熱門專案
                 const hotProjectsContainer = document.getElementById('hot-projects');
                 hotProjectsContainer.innerHTML = displayProjects.map((project, index) => `
-                    <a href="${project.url}" class="project-item" target="_blank">
+                    <a href="${project.url}" class="project-item">
                         <div class="project-rank rank-${index + 1}">${sortedProjects.length === 1 ? '🏆' : index + 1}</div>
                         <div class="project-info">
                             <div class="project-name">${project.name}</div>
