@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TingNotes - 學習記錄與思考分享</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #2c3e50;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: width 0.2s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            padding: 60px 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 50px 40px;
+            margin-bottom: 60px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .about-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #475569;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+        }
+
+        /* Categories Grid */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .category-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 35px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .category-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .category-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .category-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .category-meta {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* Current Projects */
+        .projects-section {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .projects-section h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 30px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .project-desc {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .project-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #e2e8f0;
+            padding: 40px 0;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .footer-content {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .contact-info a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .about-section,
+            .projects-section {
+                padding: 30px 20px;
+            }
+            
+            .category-card {
+                padding: 25px;
+            }
+            
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: #64748b;
+            border-radius: 2px;
+            transition: 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo">TingNotes</a>
+                <ul class="nav-links">
+                    <li><a href="/learning">學習</a></li>
+                    <li><a href="/career">職涯</a></li>
+                    <li><a href="/thoughts">雜事分享</a></li>
+                    <li><a href="/about">關於</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>記錄學習，分享思考</h1>
+                <p class="hero-subtitle">
+                    這裡是我的個人空間，記錄技術學習、職涯規劃與生活思考。<br>
+                    不依賴社交媒體，專注於深度內容的沉澱與分享。
+                </p>
+            </section>
+
+            <section class="about-section">
+                <h2>為什麼建立這個網站？</h2>
+                <div class="about-content">
+                    <p>
+                        我不喜歡將學習心得或生活感悟上傳到 Instagram 或其他社交媒體平台。
+                        這些平台雖然便利，但往往讓內容變得碎片化，難以進行深度思考和長期積累。
+                    </p>
+                    <p>
+                        因此，我決定建立這個個人網站，作為自己的數位筆記本。在這裡，我可以：
+                    </p>
+                    <p>
+                        • 不受演算法影響，專注記錄真正重要的內容<br>
+                        • 建立系統化的知識架構，便於日後回顧<br>
+                        • 與真正關心這些內容的人進行深度交流<br>
+                        • 保持對學習和思考的純粹動機
+                    </p>
+                </div>
+            </section>
+
+            <section class="categories">
+                <a href="/learning" class="category-card">
+                    <div class="category-icon">📚</div>
+                    <h3>學習</h3>
+                    <p>程式語言、技術框架、演算法等學習筆記與心得分享。包含專案開發過程、問題解決經驗、以及技術文章翻譯與導讀。</p>
+                    <div class="category-meta">持續更新中 • 技術深度探討</div>
+                </a>
+
+                <a href="/career" class="category-card">
+                    <div class="category-icon">🎯</div>
+                    <h3>職涯</h3>
+                    <p>實習申請經驗、面試準備、職業規劃思考。記錄從學生到職場的轉換過程，以及對未來發展的規劃與反思。</p>
+                    <div class="category-meta">規劃階段 • 經驗分享</div>
+                </a>
+
+                <a href="/thoughts" class="category-card">
+                    <div class="category-icon">💭</div>
+                    <h3>雜事分享</h3>
+                    <p>日常生活感悟、讀書筆記、時事觀察與個人思考。不局限於技術領域，記錄生活中值得思考的各種片段。</p>
+                    <div class="category-meta">不定期更新 • 多元思考</div>
+                </a>
+            </section>
+
+            <section class="projects-section">
+                <h2>進行中的專案</h2>
+                <div class="project-item">
+                    <div class="project-info">
+                        <div class="project-name">C Pointer Tutorial</div>
+                        <div class="project-desc">C 語言指標概念教學專案，用清晰的範例和圖解幫助初學者理解指標機制</div>
+                    </div>
+                    <a href="/cpointer" class="project-link">查看專案 →</a>
+                </div>
+                <div class="project-item">
+                    <div class="project-info">
+                        <div class="project-name">TingNotes 平台開發</div>
+                        <div class="project-desc">持續優化這個個人網站，增加內容管理功能和互動體驗</div>
+                    </div>
+                    <a href="/projects" class="project-link">開發進度 →</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2024 TingNotes - 專注於深度思考與知識累積</p>
+                <div class="contact-info">
+                    <p>聯繫方式：<a href="mailto:contact@tingnotes.io">contact@tingnotes.io</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 導航高亮效果
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.style.color = '#2c3e50';
+                link.style.fontWeight = '600';
+            }
+        });
+
+        // 響應式導航
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('mobile-active');
+            });
+        }
+    </script>
+</body>
+</html>
