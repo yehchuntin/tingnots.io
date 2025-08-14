@@ -10,29 +10,31 @@
         :root {
             /* 淺色模式 */
             --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
+            --bg-secondary: #f8fafc;
             --bg-card: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #6c757d;
-            --accent-primary: #3498db;
-            --accent-secondary: #2980b9;
-            --border-color: #e9ecef;
-            --shadow-light: rgba(0, 0, 0, 0.1);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --border-color: #e2e8f0;
+            --shadow-light: rgba(0, 0, 0, 0.04);
+            --shadow-medium: rgba(59, 130, 246, 0.1);
         }
 
         [data-theme="dark"] {
             /* 深色模式 */
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d3748;
-            --bg-card: #2d3748;
-            --text-primary: #f7fafc;
-            --text-secondary: #a0aec0;
-            --accent-primary: #4299e1;
-            --accent-secondary: #3182ce;
-            --border-color: #4a5568;
-            --shadow-light: rgba(0, 0, 0, 0.3);
-            --shadow-medium: rgba(0, 0, 0, 0.4);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-primary: #60a5fa;
+            --accent-secondary: #3b82f6;
+            --border-color: #334155;
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            --shadow-medium: rgba(96, 165, 250, 0.15);
         }
 
         * {
@@ -42,58 +44,113 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
             background: var(--bg-primary);
-            min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
         /* Header */
-        .header {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px var(--shadow-light);
-            border: 1px solid var(--border-color);
+        header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px var(--shadow-light);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
             position: relative;
         }
 
-        .theme-toggle {
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
             background: var(--accent-primary);
-            border: none;
-            color: white;
+            transition: width 0.2s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* 主題切換按鈕 */
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
             width: 40px;
             height: 40px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 16px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .theme-toggle:hover {
-            background: var(--accent-secondary);
-            transform: scale(1.1);
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
         }
 
+        /* Breadcrumb */
         .breadcrumb {
+            background: var(--bg-secondary);
+            padding: 20px 0;
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            font-size: 0.85em;
-            margin-bottom: 15px;
         }
 
         .breadcrumb a {
@@ -105,73 +162,82 @@
             text-decoration: underline;
         }
 
+        /* Main Content */
+        main {
+            padding: 60px 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .page-title {
-            font-size: 2.2em;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            line-height: 1.2;
         }
 
         .page-subtitle {
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            font-size: 1.1em;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
         /* 統計區塊 */
         .stats-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 24px;
+            margin-bottom: 60px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 4px 12px var(--shadow-light);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .stat-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px var(--shadow-medium);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px var(--shadow-medium);
         }
 
         .stat-number {
-            font-size: 2.5em;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--accent-primary);
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.9em;
+            font-size: 0.9rem;
             font-weight: 500;
         }
 
         /* 課程列表 */
         .courses-section {
             background: var(--bg-card);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px var(--shadow-light);
             border: 1px solid var(--border-color);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-
-        .section-header {
-            padding: 30px 35px 20px;
-            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 60px;
         }
 
         .section-title {
-            font-size: 1.6em;
+            font-size: 1.6rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 8px;
@@ -179,42 +245,43 @@
 
         .section-desc {
             color: var(--text-secondary);
-            font-size: 1em;
+            margin-bottom: 30px;
         }
 
         .courses-list {
-            padding: 0;
+            display: grid;
+            gap: 20px;
         }
 
         .course-item {
             display: flex;
             align-items: center;
-            padding: 25px 35px;
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            padding: 25px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s ease;
             text-decoration: none;
             color: var(--text-primary);
         }
 
-        .course-item:last-child {
-            border-bottom: none;
-        }
-
         .course-item:hover {
-            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px var(--shadow-medium);
+            transform: translateY(-2px);
             text-decoration: none;
             color: var(--text-primary);
         }
 
         .course-icon {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8em;
+            font-size: 1.6rem;
             margin-right: 20px;
             flex-shrink: 0;
         }
@@ -225,16 +292,16 @@
         }
 
         .course-title {
-            font-size: 1.3em;
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: var(--text-primary);
         }
 
         .course-desc {
             color: var(--text-secondary);
-            font-size: 0.95em;
-            margin-bottom: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
             line-height: 1.5;
         }
 
@@ -242,8 +309,8 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            font-size: 0.85em;
-            color: var(--text-secondary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .meta-item {
@@ -262,68 +329,95 @@
         }
 
         .view-count {
-            font-size: 1.1em;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--accent-primary);
         }
 
         .chapters-count {
-            font-size: 0.85em;
-            color: var(--text-secondary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         /* 即將推出 */
         .coming-soon-section {
             background: var(--bg-card);
             border: 2px dashed var(--border-color);
-            border-radius: 15px;
-            padding: 50px;
+            border-radius: 12px;
+            padding: 50px 40px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 60px;
         }
 
         .coming-soon-icon {
-            font-size: 3em;
+            font-size: 3rem;
             margin-bottom: 20px;
             opacity: 0.6;
         }
 
         .coming-soon-title {
-            font-size: 1.4em;
+            font-size: 1.4rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .coming-soon-desc {
             color: var(--text-secondary);
             max-width: 500px;
             margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            text-align: center;
+            background: var(--bg-secondary);
+        }
+
+        .footer-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .contact-info a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
         }
 
         /* 響應式設計 */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            .header {
-                padding: 25px 20px;
+            .nav-links {
+                display: none;
             }
 
             .page-title {
-                font-size: 1.8em;
+                font-size: 2rem;
             }
 
-            .section-header,
-            .course-item {
-                padding: 20px;
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .courses-section {
+                padding: 30px 20px;
             }
 
             .course-item {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
+                padding: 20px;
             }
 
             .course-stats {
@@ -347,93 +441,183 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 2px;
+            transition: 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-primary);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 6px var(--shadow-light);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .nav-links.mobile-active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links li {
+                margin-bottom: 10px;
+            }
+
+            .theme-toggle {
+                order: -1;
+                margin-right: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
-                <span id="theme-icon">🌙</span>
-            </button>
-            
-            <div class="breadcrumb">
-                <a href="../index.html">首頁</a> / 學習
-            </div>
-            
-            <h1 class="page-title">學習</h1>
-            <p class="page-subtitle">技術學習筆記與心得分享，包含程式語言、演算法等深度內容</p>
-        </header>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../index.html" class="logo">TingNotes</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">首頁</a></li>
+                    <li><a href="index.html" class="active">學習</a></li>
+                    <li><a href="../career/">職涯</a></li>
+                    <li><a href="../thoughts/">雜事分享</a></li>
+                    <li><a href="../about/">關於</a></li>
+                    <li>
+                        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
+                            <span id="theme-icon">🌙</span>
+                        </button>
+                    </li>
+                </ul>
+                <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-        <!-- 統計數據 -->
-        <section class="stats-section">
-            <div class="stat-card">
-                <span class="stat-number" id="total-courses">1</span>
-                <div class="stat-label">課程總數</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="total-chapters">18</span>
-                <div class="stat-label">章節總數</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="total-views">0</span>
-                <div class="stat-label">總觀看次數</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="last-updated">2024</span>
-                <div class="stat-label">最後更新</div>
-            </div>
-        </section>
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="../index.html">首頁</a> / 學習
+        </div>
+    </div>
 
-        <!-- 課程列表 -->
-        <section class="courses-section">
-            <div class="section-header">
+    <main>
+        <div class="container">
+            <section class="page-header">
+                <h1 class="page-title">學習</h1>
+                <p class="page-subtitle">
+                    技術學習筆記與心得分享，包含程式語言、演算法等深度內容。<br>
+                    專注於系統化知識架構的建立與實際應用。
+                </p>
+            </section>
+
+            <!-- 統計數據 -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-courses">1</span>
+                    <div class="stat-label">課程總數</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="total-chapters">18</span>
+                    <div class="stat-label">章節總數</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="total-views">0</span>
+                    <div class="stat-label">總觀看次數</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="last-updated">2025.08</span>
+                    <div class="stat-label">最後更新</div>
+                </div>
+            </section>
+
+            <!-- 課程列表 -->
+            <section class="courses-section">
                 <h2 class="section-title">程式語言學習</h2>
                 <p class="section-desc">深入探討程式語言核心概念與實際應用</p>
-            </div>
-            
-            <div class="courses-list">
-                <a href="https://yehchuntin.github.io/c-pointer-tutorial/" class="course-item" target="_blank" onclick="incrementViewCount('c-pointer')">
-                    <div class="course-icon">🔗</div>
-                    <div class="course-content">
-                        <h3 class="course-title">C語言指標完整教學</h3>
-                        <p class="course-desc">從基礎概念到進階應用，完整掌握C語言指標的精髓。包含記憶體管理、函式指標、動態配置等核心主題。</p>
-                        <div class="course-meta">
-                            <div class="meta-item">
-                                <span>📅</span>
-                                <span>2024年12月</span>
-                            </div>
-                            <div class="meta-item">
-                                <span>📚</span>
-                                <span>18個章節</span>
-                            </div>
-                            <div class="meta-item">
-                                <span>⏱️</span>
-                                <span>約8-12小時</span>
-                            </div>
-                            <div class="meta-item">
-                                <span>🎯</span>
-                                <span>初級到進階</span>
+                
+                <div class="courses-list">
+                    <a href="https://yehchuntin.github.io/c-pointer-tutorial/" class="course-item" target="_blank" onclick="incrementViewCount('c-pointer')">
+                        <div class="course-icon">🔗</div>
+                        <div class="course-content">
+                            <h3 class="course-title">C語言指標完整教學</h3>
+                            <p class="course-desc">從基礎概念到進階應用，完整掌握C語言指標的精髓。包含記憶體管理、函式指標、動態配置等核心主題。</p>
+                            <div class="course-meta">
+                                <div class="meta-item">
+                                    <span>📅</span>
+                                    <span>2024年12月</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span>📚</span>
+                                    <span>18個章節</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span>⏱️</span>
+                                    <span>約8-12小時</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span>🎯</span>
+                                    <span>初級到進階</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="course-stats">
-                        <div class="view-count" id="c-pointer-views">0 次觀看</div>
-                        <div class="chapters-count">已完成</div>
-                    </div>
-                </a>
-            </div>
-        </section>
+                        <div class="course-stats">
+                            <div class="view-count" id="c-pointer-views">0 次觀看</div>
+                            <div class="chapters-count">已完成</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
 
-        <!-- 即將推出 -->
-        <section class="coming-soon-section">
-            <div class="coming-soon-icon">🚀</div>
-            <h3 class="coming-soon-title">更多課程正在準備中</h3>
-            <p class="coming-soon-desc">
-                資料結構與演算法、系統程式設計、網路程式開發等課程正在規劃階段，
-                將持續為您帶來高品質的技術學習內容。
-            </p>
-        </section>
-    </div>
+            <!-- 即將推出 -->
+            <section class="coming-soon-section">
+                <div class="coming-soon-icon">🚀</div>
+                <h3 class="coming-soon-title">更多課程正在準備中</h3>
+                <p class="coming-soon-desc">
+                    資料結構與演算法、系統程式設計、網路程式開發等課程正在規劃階段，
+                    將持續為您帶來高品質的技術學習內容。
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2024 TingNotes - 專注於深度思考與知識累積</p>
+                <div class="contact-info">
+                    <p>聯繫方式：<a href="mailto:contact@tingnotes.io">contact@tingnotes.io</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // 觀看次數數據存儲
@@ -441,7 +625,7 @@
             'c-pointer': {
                 views: 0,
                 chapters: 18,
-                publishDate: '2025-08'
+                publishDate: '2024-12'
             }
         };
 
@@ -469,6 +653,12 @@
             
             document.body.setAttribute('data-theme', savedTheme);
             themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // 手機選單切換
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('mobile-active');
         }
 
         // 載入觀看次數數據
@@ -499,6 +689,16 @@
             }
         }
 
+        // 增加頁面觀看次數（當有人訪問學習首頁時）
+        function incrementPageViews() {
+            let pageViews = parseInt(localStorage.getItem('learningPageViews') || '0');
+            pageViews++;
+            localStorage.setItem('learningPageViews', pageViews.toString());
+            
+            // 將頁面觀看次數也計入總觀看次數
+            updateDisplayedCounts();
+        }
+
         // 更新顯示的觀看次數
         function updateDisplayedCounts() {
             // 更新個別課程觀看次數
@@ -509,8 +709,11 @@
                 }
             }
 
-            // 更新總觀看次數
-            const totalViews = Object.values(courseData).reduce((sum, course) => sum + course.views, 0);
+            // 計算總觀看次數（包括課程點擊和頁面訪問）
+            const courseViews = Object.values(courseData).reduce((sum, course) => sum + course.views, 0);
+            const pageViews = parseInt(localStorage.getItem('learningPageViews') || '0');
+            const totalViews = courseViews + pageViews;
+            
             const totalViewsElement = document.getElementById('total-views');
             if (totalViewsElement) {
                 totalViewsElement.textContent = formatNumber(totalViews);
@@ -551,11 +754,22 @@
             }
         }
 
+        // 關閉手機選單當點擊連結時
+        document.addEventListener('click', function(e) {
+            const navLinks = document.querySelector('.nav-links');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                navLinks.classList.remove('mobile-active');
+            }
+        });
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadTheme();
             loadViewCounts();
             setLastUpdated();
+            incrementPageViews(); // 每次訪問頁面時增加觀看次數
             
             // 添加進場動畫
             const elements = document.querySelectorAll('.stat-card, .courses-section, .coming-soon-section');
@@ -570,17 +784,21 @@
             });
         });
 
-        // 模擬觀看次數增長（開發用，實際使用時可移除）
+        // 模擬真實使用情況（可選，用於演示）
+        // 每30秒隨機增加一些觀看次數
+        /*
         function simulateViews() {
-            const courseId = 'c-pointer';
-            const randomIncrement = Math.floor(Math.random() * 10) + 1;
-            courseData[courseId].views += randomIncrement;
-            saveViewCounts();
-            updateDisplayedCounts();
+            const randomChoice = Math.random();
+            if (randomChoice < 0.7) {
+                // 70% 機率增加課程觀看次數
+                incrementViewCount('c-pointer');
+            } else {
+                // 30% 機率增加頁面觀看次數
+                incrementPageViews();
+            }
         }
-
-        // 每30秒自動增加一些觀看次數（模擬真實使用，可選）
-        // setInterval(simulateViews, 30000);
+        setInterval(simulateViews, 30000);
+        */
     </script>
 </body>
 </html>
