@@ -1069,5 +1069,23 @@
     </script>
 
     <script> window.location.href = "https://tingnotes.io/c-pointer-tutorial/"; </script>
+    <!-- 防止標題被意外更改 -->
+    <script>
+    // 保存原始標題
+    const originalTitle = document.title;
+
+    // 防止標題被意外更改（可選）
+    Object.defineProperty(document, 'title', {
+        get: function() {
+            return originalTitle;
+        },
+        set: function(newTitle) {
+            // 只允許設定相同的標題，防止閃爍
+            if (newTitle === originalTitle) {
+                document.getElementsByTagName('title')[0].textContent = newTitle;
+            }
+        }
+    });
+</script>
 </body>
 </html>
