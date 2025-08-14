@@ -229,46 +229,45 @@
             position: relative;
         }
 
-        .category-with-ads {
-            display: contents;
+        /* 廣告卡片樣式 - 與分類卡片相同尺寸 */
+        .ad-card {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            transition: all 0.2s ease;
+            display: block;
+            min-height: 280px;
         }
 
-        /* AdSense 雜事分享旁邊的廣告 */
-        .ad-sidebar {
-            background: var(--bg-secondary);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            min-height: 280px;
+        .ad-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .ad-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
-        .ad-sidebar-1 {
-            grid-column: span 1;
-        }
-
-        .ad-sidebar-2 {
-            grid-column: span 1;
-        }
-
-        /* 側邊廣告 */
+        /* 側邊廣告 - 從分類區塊開始 */
         .side-ads {
             position: relative;
         }
 
         .side-ad {
             position: fixed;
-            top: 60%;
-            transform: translateY(-50%);
             width: 160px;
             height: 600px;
             background: var(--bg-secondary);
-            border: 1px dashed var(--border-color);
+            border: 2px dashed var(--border-color);
             border-radius: 8px;
             color: var(--text-muted);
             font-size: 0.8rem;
@@ -278,30 +277,38 @@
             text-align: center;
             z-index: 10;
             opacity: 0;
-            animation: fadeInSideAd 1s ease-in-out 3s forwards;
+            animation: fadeInSideAd 1s ease-in-out 2s forwards;
         }
 
         .side-ad-left {
             left: 20px;
+            top: calc(var(--categories-top) + 100px);
         }
 
         .side-ad-right {
             right: 20px;
+            top: calc(var(--categories-top) + 100px);
+        }
+
+        /* 計算分類區塊的位置 */
+        :root {
+            --categories-top: 600px; /* 大約在分類區塊的位置 */
         }
 
         @keyframes fadeInSideAd {
             from {
                 opacity: 0;
-                transform: translateY(-50%) translateX(-20px);
+                transform: translateX(-10px);
             }
             to {
                 opacity: 0.8;
-                transform: translateY(-50%) translateX(0);
+                transform: translateX(0);
             }
         }
 
         .side-ad:hover {
             opacity: 1;
+            border-color: var(--accent-primary);
         }
 
         .category-card {
@@ -607,7 +614,7 @@
                 padding: 30px 20px;
             }
             
-            .category-card {
+            .category-card, .ad-card {
                 padding: 25px;
             }
             
@@ -629,17 +636,13 @@
                 margin-left: 0;
             }
 
-            /* 手機版隱藏側邊廣告和雜事分享旁廣告 */
+            /* 手機版隱藏側邊廣告和多餘的分類廣告 */
             .side-ad {
                 display: none;
             }
 
-            .ad-sidebar {
+            .ad-card {
                 display: none;
-            }
-
-            .category-with-ads {
-                display: block;
             }
         }
 
@@ -650,10 +653,14 @@
             }
         }
 
-        /* 中等螢幕調整雜事分享旁廣告 */
+        /* 中等螢幕調整廣告 */
         @media (max-width: 1200px) {
-            .ad-sidebar {
+            .ad-card {
                 min-height: 200px;
+                padding: 25px;
+            }
+            
+            .ad-placeholder {
                 font-size: 0.8rem;
             }
         }
