@@ -226,6 +226,82 @@
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
             margin-bottom: 60px;
+            position: relative;
+        }
+
+        .category-with-ads {
+            display: contents;
+        }
+
+        /* AdSense 雜事分享旁邊的廣告 */
+        .ad-sidebar {
+            background: var(--bg-secondary);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-sidebar-1 {
+            grid-column: span 1;
+        }
+
+        .ad-sidebar-2 {
+            grid-column: span 1;
+        }
+
+        /* 側邊廣告 */
+        .side-ads {
+            position: relative;
+        }
+
+        .side-ad {
+            position: fixed;
+            top: 60%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: 600px;
+            background: var(--bg-secondary);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeInSideAd 1s ease-in-out 3s forwards;
+        }
+
+        .side-ad-left {
+            left: 20px;
+        }
+
+        .side-ad-right {
+            right: 20px;
+        }
+
+        @keyframes fadeInSideAd {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(-20px);
+            }
+            to {
+                opacity: 0.8;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        .side-ad:hover {
+            opacity: 1;
         }
 
         .category-card {
@@ -552,6 +628,34 @@
                 text-align: left;
                 margin-left: 0;
             }
+
+            /* 手機版隱藏側邊廣告和雜事分享旁廣告 */
+            .side-ad {
+                display: none;
+            }
+
+            .ad-sidebar {
+                display: none;
+            }
+
+            .category-with-ads {
+                display: block;
+            }
+        }
+
+        /* 平板和小桌面螢幕 */
+        @media (max-width: 1400px) {
+            .side-ad {
+                display: none;
+            }
+        }
+
+        /* 中等螢幕調整雜事分享旁廣告 */
+        @media (max-width: 1200px) {
+            .ad-sidebar {
+                min-height: 200px;
+                font-size: 0.8rem;
+            }
         }
 
         /* 平滑捲動 */
@@ -609,12 +713,6 @@
                 </p>
             </section>
 
-            <!-- AdSense 廣告位置 1: Hero 下方 -->
-            <div class="ad-banner">
-                <!-- 在這裡插入 Google AdSense 橫幅廣告 (728x90 或 320x50) -->
-                廣告位置 1 - Hero 下方橫幅
-            </div>
-
             <section class="about-section fade-in">
                 <h2>為什麼建立這個網站？</h2>
                 <div class="about-content">
@@ -633,12 +731,6 @@
                     </p>
                 </div>
             </section>
-
-            <!-- AdSense 廣告位置 2: About 和 Categories 之間 -->
-            <div class="ad-banner">
-                <!-- 在這裡插入 Google AdSense 方形廣告 (300x250) -->
-                廣告位置 2 - About 和分類之間
-            </div>
 
             <section class="categories">
                 <a href="Learning/index.html" class="category-card fade-in">
