@@ -325,6 +325,34 @@
                 display: flex;
             }
         }
+
+        /* Mobile menu styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.mobile-active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links li {
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -333,10 +361,10 @@
             <nav>
                 <a href="/" class="logo">TingNotes</a>
                 <ul class="nav-links">
-                    <li><a href="/learning">學習</a></li>
-                    <li><a href="/career">職涯</a></li>
-                    <li><a href="/thoughts">雜事分享</a></li>
-                    <li><a href="/about">關於</a></li>
+                    <li><a href="./Learning/">學習</a></li>
+                    <li><a href="./career/">職涯</a></li>
+                    <li><a href="./thoughts/">雜事分享</a></li>
+                    <li><a href="./about/">關於</a></li>
                 </ul>
                 <div class="mobile-menu-btn">
                     <span></span>
@@ -377,21 +405,21 @@
             </section>
 
             <section class="categories">
-                <a href="/learning" class="category-card">
+                <a href="./Learning/" class="category-card">
                     <div class="category-icon">📚</div>
                     <h3>學習</h3>
                     <p>程式語言、技術框架、演算法等學習筆記與心得分享。包含專案開發過程、問題解決經驗、以及技術文章翻譯與導讀。</p>
                     <div class="category-meta">持續更新中 • 技術深度探討</div>
                 </a>
 
-                <a href="/career" class="category-card">
+                <a href="./career/" class="category-card">
                     <div class="category-icon">🎯</div>
                     <h3>職涯</h3>
                     <p>實習申請經驗、面試準備、職業規劃思考。記錄從學生到職場的轉換過程，以及對未來發展的規劃與反思。</p>
                     <div class="category-meta">規劃階段 • 經驗分享</div>
                 </a>
 
-                <a href="/thoughts" class="category-card">
+                <a href="./thoughts/" class="category-card">
                     <div class="category-icon">💭</div>
                     <h3>雜事分享</h3>
                     <p>日常生活感悟、讀書筆記、時事觀察與個人思考。不局限於技術領域，記錄生活中值得思考的各種片段。</p>
@@ -406,15 +434,21 @@
                         <div class="project-name">C Pointer Tutorial</div>
                         <div class="project-desc">C 語言指標概念教學專案，用清晰的範例和圖解幫助初學者理解指標機制</div>
                     </div>
-                    <a href="tutorial/c-pointer-tutorial/index.html">查看專案 →</a>
-
+                    <a href="./Learning/c-pointer-tutorial/" class="project-link">查看專案 →</a>
+                </div>
+                <div class="project-item">
+                    <div class="project-info">
+                        <div class="project-name">Data Structure in C</div>
+                        <div class="project-desc">C 語言資料結構學習筆記與實作範例</div>
+                    </div>
+                    <a href="./Learning/dataStructure%20in%20C/" class="project-link">查看專案 →</a>
                 </div>
                 <div class="project-item">
                     <div class="project-info">
                         <div class="project-name">TingNotes 平台開發</div>
                         <div class="project-desc">持續優化這個個人網站，增加內容管理功能和互動體驗</div>
                     </div>
-                    <a href="/projects" class="project-link">開發進度 →</a>
+                    <a href="./projects/" class="project-link">開發進度 →</a>
                 </div>
             </section>
         </div>
@@ -449,7 +483,8 @@
         // 導航高亮效果
         const currentPath = window.location.pathname;
         document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.getAttribute('href') === currentPath) {
+            const linkPath = link.getAttribute('href');
+            if (linkPath === currentPath || currentPath.startsWith(linkPath.replace('./', '/'))) {
                 link.style.color = '#2c3e50';
                 link.style.fontWeight = '600';
             }
@@ -464,6 +499,13 @@
                 navLinks.classList.toggle('mobile-active');
             });
         }
+
+        // 關閉手機選單當點擊連結時
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-active');
+            });
+        });
     </script>
 </body>
 </html>
