@@ -1,0 +1,242 @@
+# .github/workflows/auto-seo.yml
+name: 自動化 SEO 優化
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'index.html'
+      - 'Learning/index.html'
+      - '*/index.html'
+      - 'c-pointer-tutorial/**'
+  
+  # 每週也會自動執行一次
+  schedule:
+    - cron: '0 2 * * 1'  # 每週一凌晨 2 點
+
+jobs:
+  auto-seo:
+    runs-on: ubuntu-latest
+    steps:
+    
+    # 1. 檢出代碼
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 獲取完整歷史，用於比較變更
+
+    # 2. 設置 Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    # 3. 自動生成 sitemap.xml
+    - name: Generate Sitemap
+      run: |
+        cat > generate-sitemap.js << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+
+        // 自動掃描所有重要頁面
+        function scanWebsite() {
+          const pages = [
+            { url: '/', priority: '1.0', changefreq: 'weekly' },
+            { url: '/Learning/', priority: '0.8', changefreq: 'weekly' },
+            { url: '/Career/', priority: '0.6', changefreq: 'monthly' },
+            { url: '/Travel/', priority: '0.6', changefreq: 'monthly' },
+            { url: '/Others/', priority: '0.6', changefreq: 'monthly' }
+          ];
+
+          // 自動發現專案目錄
+          const directories = fs.readdirSync('.', { withFileTypes: true })
+            .filter(dirent => dirent.isDirectory())
+            .map(dirent => dirent.name)
+            .filter(name => !name.startsWith('.') && !['node_modules', 'Learning', 'Career', 'Travel', 'Others'].includes(name));
+
+          // 添加專案頁面
+          directories.forEach(dir => {
+            if (fs.existsSync(path.join(dir, 'index.html'))) {
+              pages.push({
+                url: `/${dir}/`,
+                priority: '0.9',
+                changefreq: 'monthly'
+              });
+            }
+          });
+
+          return pages;
+        }
+
+        function generateSitemap() {
+          const currentDate = new Date().toISOString().split('T')[0];
+          const pages = scanWebsite();
+          
+          let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+          xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+          
+          pages.forEach(page => {
+            xml += `  <url>\n`;
+            xml += `    <loc>https://tingnotes.io${page.url}</loc>\n`;
+            xml += `    <lastmod>${currentDate}</lastmod>\n`;
+            xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
+            xml += `    <priority>${page.priority}</priority>\n`;
+            xml += `  </url>\n`;
+          });
+          
+          xml += `</urlset>`;
+          return xml;
+        }
+
+        // 生成並寫入 sitemap
+        const sitemapContent = generateSitemap();
+        fs.writeFileSync('sitemap.xml', sitemapContent);
+        console.log('✅ Sitemap generated successfully!');
+        EOF
+
+        node generate-sitemap.js
+
+    # 4. 生成 robots.txt
+    - name: Generate robots.txt
+      run: |
+        cat > robots.txt << 'EOF'
+        User-agent: *
+        Allow: /
+
+        # 重要資源
+        Allow: /c-pointer-tutorial/
+        Allow: /Learning/
+        Allow: /Career/
+        Allow: /Travel/
+        Allow: /Others/
+
+        # Sitemap 位置
+        Sitemap: https://tingnotes.io/sitemap.xml
+
+        # 爬取延遲（秒）
+        Crawl-delay: 1
+        EOF
+
+    # 5. 檢查變更並提交
+    - name: Check for changes
+      id: changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Auto SEO Bot"
+        
+        if [[ `git status --porcelain` ]]; then
+          git add sitemap.xml robots.txt
+          git commit -m "🤖 Auto-update SEO files: sitemap.xml & robots.txt"
+          git push
+          echo "changed=true" >> $GITHUB_OUTPUT
+          
+          # 輸出變更的檔案用於後續步驟
+          git diff --name-only HEAD~1 HEAD > changed_files.txt
+          echo "Changed files:"
+          cat changed_files.txt
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No changes detected"
+        fi
+
+    # 6. 自動提交到 Google Search Console
+    - name: Submit to Google Search Console
+      if: steps.changes.outputs.changed == 'true'
+      env:
+        GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+      run: |
+        # 安裝 Google API 客戶端
+        npm install googleapis
+
+        cat > submit-to-google.js << 'EOF'
+        const { google } = require('googleapis');
+        const fs = require('fs');
+
+        async function submitToGoogle() {
+          try {
+            // 使用服務帳戶認證
+            const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '{}');
+            
+            if (!credentials.client_email) {
+              console.log('⚠️ Google credentials not configured, skipping Google submission');
+              return;
+            }
+
+            const auth = new google.auth.GoogleAuth({
+              credentials: credentials,
+              scopes: ['https://www.googleapis.com/auth/webmasters']
+            });
+
+            const searchconsole = google.searchconsole({ version: 'v1', auth });
+
+            // 提交 sitemap
+            await searchconsole.sitemaps.submit({
+              siteUrl: 'https://tingnotes.io',
+              feedpath: 'https://tingnotes.io/sitemap.xml'
+            });
+
+            console.log('✅ Sitemap submitted to Google Search Console!');
+
+            // 如果有新的重要頁面，直接提交 URL
+            const changedFiles = fs.readFileSync('changed_files.txt', 'utf8').split('\n').filter(Boolean);
+            
+            for (const file of changedFiles) {
+              if (file.includes('index.html') && !file.includes('.git')) {
+                const url = `https://tingnotes.io/${file.replace('/index.html', '/').replace('index.html', '')}`;
+                
+                try {
+                  await searchconsole.urlInspection.index.inspect({
+                    inspectionUrl: url,
+                    siteUrl: 'https://tingnotes.io'
+                  });
+                  console.log(`✅ Submitted URL to Google: ${url}`);
+                } catch (error) {
+                  console.log(`⚠️ Could not submit ${url}: ${error.message}`);
+                }
+              }
+            }
+
+          } catch (error) {
+            console.log(`⚠️ Google submission failed: ${error.message}`);
+            console.log('This is not critical - sitemap will still be discovered naturally');
+          }
+        }
+
+        submitToGoogle();
+        EOF
+
+        node submit-to-google.js
+
+    # 7. Ping 搜尋引擎
+    - name: Ping Search Engines
+      run: |
+        echo "🔔 Pinging search engines about sitemap update..."
+        
+        # Ping Google
+        curl -s "https://www.google.com/ping?sitemap=https://tingnotes.io/sitemap.xml" || echo "Google ping failed"
+        
+        # Ping Bing
+        curl -s "https://www.bing.com/ping?sitemap=https://tingnotes.io/sitemap.xml" || echo "Bing ping failed"
+        
+        echo "✅ Search engine ping completed!"
+
+    # 8. 生成報告
+    - name: Generate SEO Report
+      run: |
+        echo "📊 SEO 自動化報告" > seo_report.md
+        echo "==================" >> seo_report.md
+        echo "" >> seo_report.md
+        echo "🕐 執行時間: $(date)" >> seo_report.md
+        echo "🔗 網站: https://tingnotes.io" >> seo_report.md
+        echo "📄 Sitemap: https://tingnotes.io/sitemap.xml" >> seo_report.md
+        echo "" >> seo_report.md
+        
+        if [[ -f changed_files.txt ]]; then
+          echo "📝 本次變更檔案:" >> seo_report.md
+          cat changed_files.txt >> seo_report.md
+        fi
+        
+        echo "" >> seo_report.md
+        echo "✅ 自動化任務完成！" >> seo_report.md
+        
+        cat seo_report.md
