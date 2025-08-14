@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 更新 sitemap.xml，添加新的 URL -->
-<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://tingnotes.io/</loc>
@@ -9,7 +7,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://tingnotes.io/Learning/index.html</loc>
+    <loc>https://tingnotes.io/Learning/</loc>
     <lastmod>2025-08-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -21,19 +19,19 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://tingnotes.io/Career/index.html</loc>
+    <loc>https://tingnotes.io/Career/</loc>
     <lastmod>2025-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://tingnotes.io/Travel/index.html</loc>
+    <loc>https://tingnotes.io/Travel/</loc>
     <lastmod>2025-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://tingnotes.io/Others/index.html</loc>
+    <loc>https://tingnotes.io/Others/</loc>
     <lastmod>2025-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
