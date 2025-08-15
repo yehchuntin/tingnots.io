@@ -22,9 +22,6 @@
             --theme-btn-bg: rgba(0, 0, 0, 0.1);
             --theme-btn-border: rgba(0, 0, 0, 0.2);
             --theme-btn-icon: rgba(0, 0, 0, 0.7);
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
         }
 
         [data-theme="dark"] {
@@ -42,9 +39,6 @@
             --theme-btn-bg: rgba(255, 255, 255, 0.1);
             --theme-btn-border: rgba(255, 255, 255, 0.3);
             --theme-btn-icon: rgba(255, 255, 255, 0.8);
-            --success-color: #48bb78;
-            --warning-color: #ed8936;
-            --danger-color: #f56565;
         }
 
         * {
@@ -112,32 +106,6 @@
             transition: all 0.3s ease;
         }
 
-        /* 文字導航 */
-        .text-navigation {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            font-size: 0.95em;
-            color: var(--text-secondary);
-        }
-
-        .text-navigation a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .text-navigation a:hover {
-            color: var(--accent-secondary);
-            text-decoration: underline;
-        }
-
-        .text-navigation .current {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
         .breadcrumb {
             color: var(--text-secondary);
             font-size: 0.85em;
@@ -147,10 +115,12 @@
         .breadcrumb a {
             color: var(--accent-primary);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
 
         .breadcrumb a:hover {
             text-decoration: underline;
+            color: var(--accent-secondary);
         }
 
         .page-title {
@@ -204,7 +174,7 @@
             font-weight: 500;
         }
 
-        /* 學習分類選擇器 */
+        /* 分類選擇器 */
         .category-selector {
             background: var(--bg-card);
             border-radius: 15px;
@@ -217,6 +187,7 @@
         .selector-header {
             padding: 25px 30px 15px;
             border-bottom: 1px solid var(--border-color);
+            text-align: center;
         }
 
         .selector-title {
@@ -231,6 +202,7 @@
             font-size: 0.95em;
         }
 
+        /* 分類按鈕標籤 */
         .category-tabs {
             display: flex;
             background: var(--bg-secondary);
@@ -281,9 +253,10 @@
             margin-bottom: 5px;
         }
 
+        /* 內容區域 */
         .category-content {
             padding: 30px;
-            min-height: 300px;
+            min-height: 400px;
         }
 
         .tab-panel {
@@ -294,14 +267,48 @@
             display: block;
         }
 
-        /* 專案網格 */
+        /* 專案橫向滾動區域 - 只用於程式技術 */
+        .projects-scroll-container {
+            position: relative;
+            overflow: hidden;
+            margin: 0 -10px;
+        }
+
+        .projects-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) var(--bg-secondary);
+        }
+
+        .projects-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .projects-scroll-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+
+        .projects-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 10px;
+        }
+
+        .projects-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
         .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            display: flex;
             gap: 20px;
+            min-height: 320px;
+            padding-bottom: 10px;
         }
 
         .project-card {
+            flex: 0 0 350px;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -311,6 +318,7 @@
             color: var(--text-primary);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .project-card:hover:not(.disabled) {
@@ -387,17 +395,17 @@
 
         .status-completed {
             background: rgba(39, 174, 96, 0.1);
-            color: var(--success-color);
+            color: #27ae60;
         }
 
         .status-progress {
             background: rgba(243, 156, 18, 0.1);
-            color: var(--warning-color);
+            color: #f39c12;
         }
 
         .status-planned {
             background: rgba(231, 76, 60, 0.1);
-            color: var(--danger-color);
+            color: #e74c3c;
         }
 
         .project-stats {
@@ -421,31 +429,86 @@
             color: var(--text-secondary);
         }
 
+        /* 滾動提示箭頭 */
+        .scroll-hint {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background: var(--accent-primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            opacity: 0.8;
+            animation: scrollHint 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes scrollHint {
+            0%, 50%, 100% { transform: translateY(-50%) translateX(0); }
+            25% { transform: translateY(-50%) translateX(-3px); }
+            75% { transform: translateY(-50%) translateX(3px); }
+        }
+
         /* 空狀態 */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: var(--text-secondary);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .empty-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
+            font-size: 4em;
+            margin-bottom: 20px;
             opacity: 0.5;
+            animation: float 3s ease-in-out infinite;
         }
 
         .empty-title {
-            font-size: 1.2em;
+            font-size: 1.3em;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: var(--text-primary);
         }
 
         .empty-desc {
-            font-size: 0.95em;
-            max-width: 300px;
+            font-size: 1em;
+            max-width: 350px;
             margin: 0 auto;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .update-hint {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 0.85em;
+            color: var(--accent-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* 載入動畫 */
@@ -482,9 +545,8 @@
                 gap: 15px;
             }
 
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+            .project-card {
+                flex: 0 0 280px;
             }
 
             .category-tabs {
@@ -500,11 +562,28 @@
             .tab-icon {
                 font-size: 1em;
             }
+
+            .category-content {
+                padding: 20px;
+            }
+
+            .projects-scroll-container {
+                margin: 0 -5px;
+            }
+
+            .projects-scroll-wrapper {
+                padding: 5px;
+            }
         }
 
         @media (max-width: 480px) {
             .stats-section {
                 grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                flex: 0 0 250px;
+                padding: 20px;
             }
 
             .project-header {
@@ -529,10 +608,11 @@
             </button>
             
             <div class="breadcrumb">
-                <a href="../index.html">首頁</a> / 學習 / 
+                <span style="color: var(--text-primary); font-weight: 500;">學習</span> / 
                 <a href="../Career/index.html">職涯</a> / 
                 <a href="../Travel/index.html">旅遊</a> / 
-                <a href="../Others/index.html">雜事分享</a>
+                <a href="../Others/index.html">雜事分享</a> / 
+                <a href="../index.html">首頁</a>
             </div>
             
             <h1 class="page-title">學習</h1>
@@ -551,10 +631,8 @@
                 <div class="stat-label">已完成內容</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="in-progress-projects">
-                    <span class="loading"></span>
-                </span>
-                <div class="stat-label">進行中專案</div>
+                <span class="stat-number" id="total-topics">4</span>
+                <div class="stat-label">主題分類</div>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="total-views">
@@ -572,7 +650,7 @@
         <section class="category-selector">
             <div class="selector-header">
                 <h2 class="selector-title">選擇學習主題</h2>
-                <p class="selector-subtitle">探索不同領域的知識內容，找到你感興趣的學習方向</p>
+                <p class="selector-subtitle">點擊標籤切換不同領域的學習內容</p>
             </div>
             
             <div class="category-tabs">
@@ -597,8 +675,13 @@
             <div class="category-content">
                 <!-- 程式技術 -->
                 <div id="programming-panel" class="tab-panel active">
-                    <div class="projects-grid" id="programming-projects">
-                        <!-- 動態載入程式技術專案 -->
+                    <div class="projects-scroll-container">
+                        <div class="scroll-hint hidden" id="programming-scroll-hint">→</div>
+                        <div class="projects-scroll-wrapper" id="programming-scroll">
+                            <div class="projects-grid" id="programming-projects">
+                                <!-- 動態載入程式技術專案 -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -607,7 +690,14 @@
                     <div class="empty-state">
                         <div class="empty-icon">📈</div>
                         <div class="empty-title">投資理財課程準備中</div>
-                        <div class="empty-desc">正在準備股市投資、理財規劃等相關內容，敬請期待！</div>
+                        <div class="empty-desc">
+                            正在準備股市投資、理財規劃等相關內容，<br>
+                            將包含實戰經驗與風險管理策略！
+                        </div>
+                        <div class="update-hint">
+                            <span>💰</span>
+                            <span>理財知識即將分享</span>
+                        </div>
                     </div>
                 </div>
 
@@ -616,7 +706,14 @@
                     <div class="empty-state">
                         <div class="empty-icon">📸</div>
                         <div class="empty-title">攝影藝術課程構思中</div>
-                        <div class="empty-desc">攝影技巧、構圖美學等內容正在規劃階段，即將推出！</div>
+                        <div class="empty-desc">
+                            攝影技巧、構圖美學、後製修圖等內容正在規劃階段，<br>
+                            將分享完整攝影學習路徑！
+                        </div>
+                        <div class="update-hint">
+                            <span>📷</span>
+                            <span>攝影技巧即將開課</span>
+                        </div>
                     </div>
                 </div>
 
@@ -625,7 +722,14 @@
                     <div class="empty-state">
                         <div class="empty-icon">🎯</div>
                         <div class="empty-title">更多主題陸續增加</div>
-                        <div class="empty-desc">語言學習、設計思維等其他主題正在準備中，請持續關注！</div>
+                        <div class="empty-desc">
+                            語言學習、設計思維、音樂創作等其他主題正在準備中，<br>
+                            期待分享更多元的學習內容！
+                        </div>
+                        <div class="update-hint">
+                            <span>🌟</span>
+                            <span>多元內容持續增加</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -653,7 +757,7 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 專案數據配置 - 只需要在這裡添加新專案
+        // 專案數據配置 - 只保留實際存在的專案
         const projectsData = {
             'c-pointer-tutorial': {
                 title: 'C語言指標完整教學',
@@ -666,32 +770,7 @@
                 difficulty: '初級-進階',
                 url: './c-pointer-tutorial/',
                 icon: '🔗'
-            },
-            'data-structure-in-c': {
-                title: 'Data Structure in C',
-                subtitle: 'C 語言資料結構學習筆記與實作範例',
-                category: 'programming',
-                status: 'progress',
-                chapters: 0,
-                publishDate: '2025-08',
-                estimatedTime: '進行中',
-                difficulty: '中級',
-                url: null, // 進行中不可點擊
-                icon: '📊'
-            },
-            'algorithm-analysis': {
-                title: '演算法分析與設計',
-                subtitle: '常見演算法的時間複雜度分析與優化技巧',
-                category: 'programming',
-                status: 'planned',
-                chapters: 0,
-                publishDate: '2025-09',
-                estimatedTime: '預計15小時',
-                difficulty: '進階',
-                url: null,
-                icon: '⚡'
             }
-            // 未來可以輕鬆添加更多專案...
         };
 
         // 獲取觀看次數
@@ -723,6 +802,44 @@
             }
         }
 
+        // 增加頁面觀看次數
+        async function incrementPageViews() {
+            try {
+                const counterRef = ref(database, 'counters/page_learning');
+                const result = await runTransaction(counterRef, (currentValue) => {
+                    return (currentValue || 0) + 1;
+                });
+                return result.snapshot.val();
+            } catch (error) {
+                console.error('Failed to increment page views:', error);
+                return 0;
+            }
+        }
+
+        // 獲取頁面觀看次數
+        async function getPageViews() {
+            try {
+                const snapshot = await get(ref(database, 'counters/page_learning'));
+                return snapshot.exists() ? snapshot.val() : 0;
+            } catch (error) {
+                console.error('Failed to get page views:', error);
+                return 0;
+            }
+        }
+
+        // 檢查是否為新訪客
+        function shouldCountPageView() {
+            const lastVisit = localStorage.getItem('lastLearningPageVisit');
+            const now = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            
+            if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
+                localStorage.setItem('lastLearningPageVisit', now.toString());
+                return true;
+            }
+            return false;
+        }
+
         // 格式化數字
         function formatNumber(num) {
             if (num >= 1000000) {
@@ -737,7 +854,6 @@
         async function loadProgrammingProjects() {
             const container = document.getElementById('programming-projects');
             
-            // 獲取程式技術分類的專案
             const programmingProjects = Object.entries(projectsData)
                 .filter(([id, project]) => project.category === 'programming');
 
@@ -780,6 +896,32 @@
             }
             
             container.innerHTML = html;
+            checkScrollHint('programming');
+        }
+
+        // 檢查是否需要顯示滾動提示
+        function checkScrollHint(category) {
+            const scrollWrapper = document.getElementById(`${category}-scroll`);
+            const scrollHint = document.getElementById(`${category}-scroll-hint`);
+            
+            if (scrollWrapper && scrollHint) {
+                setTimeout(() => {
+                    const hasOverflow = scrollWrapper.scrollWidth > scrollWrapper.clientWidth;
+                    if (hasOverflow) {
+                        scrollHint.classList.remove('hidden');
+                        
+                        const hideHint = () => {
+                            if (scrollWrapper.scrollLeft > 20) {
+                                scrollHint.classList.add('hidden');
+                                scrollWrapper.removeEventListener('scroll', hideHint);
+                            }
+                        };
+                        scrollWrapper.addEventListener('scroll', hideHint);
+                    } else {
+                        scrollHint.classList.add('hidden');
+                    }
+                }, 100);
+            }
         }
 
         // 更新統計數據
@@ -789,13 +931,11 @@
                 .filter(project => project.status === 'completed').length;
             document.getElementById('total-content').textContent = completedContent;
 
-            // 計算進行中專案數
-            const inProgressProjects = Object.values(projectsData)
-                .filter(project => project.status === 'progress').length;
-            document.getElementById('in-progress-projects').textContent = inProgressProjects;
+            // 主題分類數（固定4個）
+            document.getElementById('total-topics').textContent = '4';
 
-            // 計算總觀看次數
-            let totalViews = 0;
+            // 計算總觀看次數（專案觀看 + 頁面觀看）
+            let totalViews = await getPageViews();
             for (const projectId of Object.keys(projectsData)) {
                 const views = await getViewCount(projectId);
                 totalViews += views;
@@ -814,44 +954,13 @@
             const project = projectsData[projectId];
             
             if (project && project.status === 'completed' && project.url) {
-                // 增加觀看次數
                 await incrementViewCount(projectId);
-                
-                // 跳轉到專案頁面
                 window.location.href = project.url;
             }
         };
 
-        // 檢查是否為新訪客
-        function shouldCountPageView() {
-            const lastVisit = localStorage.getItem('lastLearningPageVisit');
-            const now = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-            
-            if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
-                localStorage.setItem('lastLearningPageVisit', now.toString());
-                return true;
-            }
-            return false;
-        }
-
-        // 增加頁面觀看次數
-        async function incrementPageViews() {
-            try {
-                const counterRef = ref(database, 'counters/page_learning');
-                const result = await runTransaction(counterRef, (currentValue) => {
-                    return (currentValue || 0) + 1;
-                });
-                return result.snapshot.val();
-            } catch (error) {
-                console.error('Failed to increment page views:', error);
-                return 0;
-            }
-        }
-
         // 初始化頁面
         document.addEventListener('DOMContentLoaded', async function() {
-            // 載入所有數據
             await Promise.all([
                 loadProgrammingProjects(),
                 updateStatistics()
@@ -860,6 +969,7 @@
             // 如果是新訪客，增加頁面觀看次數
             if (shouldCountPageView()) {
                 await incrementPageViews();
+                await updateStatistics(); // 重新更新統計數據
             }
 
             // 添加進場動畫
@@ -892,6 +1002,44 @@
             document.getElementById(category + '-panel').classList.add('active');
         }
 
+        // 添加平滑滾動功能
+        function addSmoothScrolling() {
+            const scrollWrappers = document.querySelectorAll('.projects-scroll-wrapper');
+            
+            scrollWrappers.forEach(wrapper => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                wrapper.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    wrapper.style.cursor = 'grabbing';
+                    startX = e.pageX - wrapper.offsetLeft;
+                    scrollLeft = wrapper.scrollLeft;
+                });
+
+                wrapper.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    wrapper.style.cursor = 'grab';
+                });
+
+                wrapper.addEventListener('mouseup', () => {
+                    isDown = false;
+                    wrapper.style.cursor = 'grab';
+                });
+
+                wrapper.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - wrapper.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    wrapper.scrollLeft = scrollLeft - walk;
+                });
+
+                wrapper.style.cursor = 'grab';
+            });
+        }
+
         // 深淺色模式切換
         function toggleTheme() {
             const body = document.body;
@@ -922,9 +1070,23 @@
             }
         }
 
-        // 初始化主題
+        // 初始化所有功能
         document.addEventListener('DOMContentLoaded', function() {
             loadTheme();
+            addSmoothScrolling();
+            
+            // 初始檢查程式技術分類的滾動提示
+            setTimeout(() => {
+                checkScrollHint('programming');
+            }, 500);
+        });
+
+        // 視窗大小變化時重新檢查滾動提示
+        window.addEventListener('resize', () => {
+            const activePanel = document.querySelector('.tab-panel.active');
+            if (activePanel && activePanel.id === 'programming-panel') {
+                checkScrollHint('programming');
+            }
         });
     </script>
 </body>
