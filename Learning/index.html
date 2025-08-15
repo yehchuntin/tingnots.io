@@ -429,37 +429,6 @@
             color: var(--text-secondary);
         }
 
-        /* 滾動提示箭頭 */
-        .scroll-hint {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            background: var(--accent-primary);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            opacity: 0.8;
-            animation: scrollHint 2s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .scroll-hint.hidden {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        @keyframes scrollHint {
-            0%, 50%, 100% { transform: translateY(-50%) translateX(0); }
-            25% { transform: translateY(-50%) translateX(-3px); }
-            75% { transform: translateY(-50%) translateX(3px); }
-        }
-
         /* 空狀態 */
         .empty-state {
             text-align: center;
@@ -676,7 +645,6 @@
                 <!-- 程式技術 -->
                 <div id="programming-panel" class="tab-panel active">
                     <div class="projects-scroll-container">
-                        <div class="scroll-hint hidden" id="programming-scroll-hint">→</div>
                         <div class="projects-scroll-wrapper" id="programming-scroll">
                             <div class="projects-grid" id="programming-projects">
                                 <!-- 動態載入程式技術專案 -->
@@ -757,8 +725,8 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 專案數據配置 - 只保留實際存在的專案
-        const projectsData = {
+        // 學習主題的專案數據配置
+        const learningProjectsData = {
             'c-pointer-tutorial': {
                 title: 'C語言指標完整教學',
                 subtitle: '從基礎到進階，完整掌握指標精髓',
@@ -771,9 +739,10 @@
                 url: './c-pointer-tutorial/',
                 icon: '🔗'
             }
+            // 未來可以添加更多專案
         };
 
-        // 獲取觀看次數
+        // 獲取觀看次數 - 新規則：每次都計算
         async function getViewCount(projectId) {
             try {
                 const snapshot = await get(ref(database, `counters/content_${projectId}`));
@@ -784,7 +753,7 @@
             }
         }
 
-        // 增加觀看次數
+        // 增加觀看次數 - 新規則：每次點擊都計算，不限制重複
         async function incrementViewCount(projectId) {
             try {
                 const counterRef = ref(database, `counters/content_${projectId}`);
@@ -792,6 +761,7 @@
                     return (currentValue || 0) + 1;
                 });
                 localStorage.setItem(`fallback_content_${projectId}`, result.snapshot.val().toString());
+                console.log(`📈 專案 ${projectId} 觀看次數增加到: ${result.snapshot.val()}`);
                 return result.snapshot.val();
             } catch (error) {
                 console.error('Failed to increment counter:', error);
@@ -800,44 +770,6 @@
                 localStorage.setItem(`fallback_content_${projectId}`, newValue.toString());
                 return newValue;
             }
-        }
-
-        // 增加頁面觀看次數
-        async function incrementPageViews() {
-            try {
-                const counterRef = ref(database, 'counters/page_learning');
-                const result = await runTransaction(counterRef, (currentValue) => {
-                    return (currentValue || 0) + 1;
-                });
-                return result.snapshot.val();
-            } catch (error) {
-                console.error('Failed to increment page views:', error);
-                return 0;
-            }
-        }
-
-        // 獲取頁面觀看次數
-        async function getPageViews() {
-            try {
-                const snapshot = await get(ref(database, 'counters/page_learning'));
-                return snapshot.exists() ? snapshot.val() : 0;
-            } catch (error) {
-                console.error('Failed to get page views:', error);
-                return 0;
-            }
-        }
-
-        // 檢查是否為新訪客
-        function shouldCountPageView() {
-            const lastVisit = localStorage.getItem('lastLearningPageVisit');
-            const now = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-            
-            if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
-                localStorage.setItem('lastLearningPageVisit', now.toString());
-                return true;
-            }
-            return false;
         }
 
         // 格式化數字
@@ -854,7 +786,7 @@
         async function loadProgrammingProjects() {
             const container = document.getElementById('programming-projects');
             
-            const programmingProjects = Object.entries(projectsData)
+            const programmingProjects = Object.entries(learningProjectsData)
                 .filter(([id, project]) => project.category === 'programming');
 
             let html = '';
@@ -896,50 +828,34 @@
             }
             
             container.innerHTML = html;
-            checkScrollHint('programming');
         }
 
-        // 檢查是否需要顯示滾動提示
-        function checkScrollHint(category) {
-            const scrollWrapper = document.getElementById(`${category}-scroll`);
-            const scrollHint = document.getElementById(`${category}-scroll-hint`);
+        // 計算學習主題的總觀看次數（各專案總和）
+        async function calculateLearningTotalViews() {
+            let totalViews = 0;
             
-            if (scrollWrapper && scrollHint) {
-                setTimeout(() => {
-                    const hasOverflow = scrollWrapper.scrollWidth > scrollWrapper.clientWidth;
-                    if (hasOverflow) {
-                        scrollHint.classList.remove('hidden');
-                        
-                        const hideHint = () => {
-                            if (scrollWrapper.scrollLeft > 20) {
-                                scrollHint.classList.add('hidden');
-                                scrollWrapper.removeEventListener('scroll', hideHint);
-                            }
-                        };
-                        scrollWrapper.addEventListener('scroll', hideHint);
-                    } else {
-                        scrollHint.classList.add('hidden');
-                    }
-                }, 100);
+            // 計算所有學習專案的觀看次數總和
+            for (const projectId of Object.keys(learningProjectsData)) {
+                const views = await getViewCount(projectId);
+                totalViews += views;
             }
+            
+            console.log(`📊 學習主題總觀看次數: ${totalViews} (來自 ${Object.keys(learningProjectsData).length} 個專案)`);
+            return totalViews;
         }
 
         // 更新統計數據
         async function updateStatistics() {
             // 計算已完成內容數（只計算 completed 狀態）
-            const completedContent = Object.values(projectsData)
+            const completedContent = Object.values(learningProjectsData)
                 .filter(project => project.status === 'completed').length;
             document.getElementById('total-content').textContent = completedContent;
 
             // 主題分類數（固定4個）
             document.getElementById('total-topics').textContent = '4';
 
-            // 計算總觀看次數（專案觀看 + 頁面觀看）
-            let totalViews = await getPageViews();
-            for (const projectId of Object.keys(projectsData)) {
-                const views = await getViewCount(projectId);
-                totalViews += views;
-            }
+            // 計算總觀看次數（改為學習專案的總和）
+            const totalViews = await calculateLearningTotalViews();
             document.getElementById('total-views').textContent = formatNumber(totalViews);
 
             // 設定最後更新時間
@@ -949,28 +865,37 @@
             document.getElementById('last-updated').textContent = `${year}.${month}`;
         }
 
-        // 處理專案點擊
+        // 處理專案點擊 - 新規則：每次點擊都增加觀看次數
         window.handleProjectClick = async function(projectId) {
-            const project = projectsData[projectId];
+            const project = learningProjectsData[projectId];
             
             if (project && project.status === 'completed' && project.url) {
+                console.log(`🔗 用戶點擊專案: ${project.title} (${projectId})`);
+                
+                // 立即增加觀看次數
                 await incrementViewCount(projectId);
+                
+                // 更新顯示的統計數據
+                await updateStatistics();
+                await loadProgrammingProjects();
+                
+                // 跳轉到專案頁面
                 window.location.href = project.url;
             }
         };
 
         // 初始化頁面
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('📚 學習頁面載入完成');
+            console.log('📋 新的瀏覽次數計算規則：');
+            console.log('   • 每次進入專案都計算一次瀏覽');
+            console.log('   • 不限制同一用戶重複瀏覽');
+            console.log('   • 學習頁面總次數 = 所有學習專案的觀看次數總和');
+            
             await Promise.all([
                 loadProgrammingProjects(),
                 updateStatistics()
             ]);
-
-            // 如果是新訪客，增加頁面觀看次數
-            if (shouldCountPageView()) {
-                await incrementPageViews();
-                await updateStatistics(); // 重新更新統計數據
-            }
 
             // 添加進場動畫
             const elements = document.querySelectorAll('.stat-card, .category-selector');
@@ -1000,44 +925,6 @@
             // 激活選中的標籤和面板
             event.target.classList.add('active');
             document.getElementById(category + '-panel').classList.add('active');
-        }
-
-        // 添加平滑滾動功能
-        function addSmoothScrolling() {
-            const scrollWrappers = document.querySelectorAll('.projects-scroll-wrapper');
-            
-            scrollWrappers.forEach(wrapper => {
-                let isDown = false;
-                let startX;
-                let scrollLeft;
-
-                wrapper.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    wrapper.style.cursor = 'grabbing';
-                    startX = e.pageX - wrapper.offsetLeft;
-                    scrollLeft = wrapper.scrollLeft;
-                });
-
-                wrapper.addEventListener('mouseleave', () => {
-                    isDown = false;
-                    wrapper.style.cursor = 'grab';
-                });
-
-                wrapper.addEventListener('mouseup', () => {
-                    isDown = false;
-                    wrapper.style.cursor = 'grab';
-                });
-
-                wrapper.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - wrapper.offsetLeft;
-                    const walk = (x - startX) * 2;
-                    wrapper.scrollLeft = scrollLeft - walk;
-                });
-
-                wrapper.style.cursor = 'grab';
-            });
         }
 
         // 深淺色模式切換
@@ -1073,20 +960,6 @@
         // 初始化所有功能
         document.addEventListener('DOMContentLoaded', function() {
             loadTheme();
-            addSmoothScrolling();
-            
-            // 初始檢查程式技術分類的滾動提示
-            setTimeout(() => {
-                checkScrollHint('programming');
-            }, 500);
-        });
-
-        // 視窗大小變化時重新檢查滾動提示
-        window.addEventListener('resize', () => {
-            const activePanel = document.querySelector('.tab-panel.active');
-            if (activePanel && activePanel.id === 'programming-panel') {
-                checkScrollHint('programming');
-            }
         });
     </script>
 </body>
