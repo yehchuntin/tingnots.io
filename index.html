@@ -842,48 +842,7 @@
                 estimatedTime: '8-12小時',
                 difficulty: '初級-進階'
             }
-            // 未來可以添加更多專案，例如：
-            /*
-            {
-                id: 'data-structures-c',
-                name: 'C語言資料結構實作',
-                desc: '深入理解資料結構的核心概念，並用C語言完整實作各種資料結構。',
-                url: './Learning/data-structures-c/',
-                category: 'learning',
-                categoryName: '學習',
-                status: '進行中',
-                publishDate: '2025-09',
-                chapters: 12,
-                estimatedTime: '6-10小時',
-                difficulty: '中級'
-            },
-            {
-                id: 'interview-preparation',
-                name: '軟體工程師面試準備指南',
-                desc: '完整的技術面試準備攻略，包含演算法題目解析與面試技巧分享。',
-                url: './Career/interview-guide/',
-                category: 'career',
-                categoryName: '職涯',
-                status: '規劃中',
-                publishDate: '2025-10',
-                chapters: 8,
-                estimatedTime: '4-6小時',
-                difficulty: '中級'
-            },
-            {
-                id: 'japan-travel-guide',
-                name: '日本深度旅遊攻略',
-                desc: '從文化體驗到美食探索，分享日本旅行的深度體驗與實用建議。',
-                url: './Travel/japan-guide/',
-                category: 'travel',
-                categoryName: '旅遊',
-                status: '規劃中',
-                publishDate: '2025-11',
-                chapters: 6,
-                estimatedTime: '2-4小時',
-                difficulty: '入門'
-            }
-            */
+            // 未來可以添加更多其他主題的專案於此
         ];
 
         // 格式化數字顯示
@@ -896,41 +855,32 @@
             return num.toString();
         }
 
-        // 獲取專案觀看次數 - 新計算方式：每次進入都計算
+        // 獲取專案觀看次數
         async function getProjectViews(projectId) {
             try {
                 const snapshot = await get(ref(database, `counters/content_${projectId}`));
                 return snapshot.exists() ? snapshot.val() : 0;
             } catch (error) {
                 console.error(`Failed to get views for ${projectId}:`, error);
-                // 使用本地存儲作為備案
-                return parseInt(localStorage.getItem(`fallback_content_${projectId}`) || '0');
+                return 0; // 發生錯誤時返回 0
             }
         }
 
-        // 增加專案觀看次數 - 新規則：每次進入都增加，不管是否同一用戶
+        // 增加專案觀看次數
         async function incrementProjectViews(projectId) {
             try {
                 const counterRef = ref(database, `counters/content_${projectId}`);
                 const result = await runTransaction(counterRef, (currentValue) => {
                     return (currentValue || 0) + 1;
                 });
-                
-                // 更新本地備案
-                localStorage.setItem(`fallback_content_${projectId}`, result.snapshot.val().toString());
                 console.log(`專案 ${projectId} 觀看次數增加到: ${result.snapshot.val()}`);
-                
                 return result.snapshot.val();
             } catch (error) {
                 console.error(`Failed to increment views for ${projectId}:`, error);
-                // 使用本地存儲作為備案
-                const currentValue = parseInt(localStorage.getItem(`fallback_content_${projectId}`) || '0');
-                const newValue = currentValue + 1;
-                localStorage.setItem(`fallback_content_${projectId}`, newValue.toString());
-                return newValue;
+                return null;
             }
         }
-
+        
         // 獲取專案排名圖標
         function getRankIcon(rank) {
             switch(rank) {
@@ -946,7 +896,7 @@
             const rankIcon = getRankIcon(rank);
             
             return `
-                <a href="${project.url}" class="project-item" onclick="trackProjectClick('${project.id}')">
+                <a href="${project.url}" class="project-item" onclick="event.preventDefault(); trackProjectClick('${project.id}', '${project.url}')">
                     <div class="project-rank rank-${rank}">${rankIcon}</div>
                     <div class="project-info">
                         <div class="project-name">${project.name}</div>
@@ -970,115 +920,52 @@
         // 載入熱門專案排行榜
         async function loadHotProjects() {
             try {
-                console.log('🔥 開始載入熱門專案排行榜...');
-                
                 // 獲取所有專案的觀看次數
                 const projectsWithViews = await Promise.all(
                     allProjectsData.map(async (project) => {
                         const views = await getProjectViews(project.id);
-                        console.log(`📊 專案 ${project.name} (${project.id}) 累積觀看次數: ${views}`);
                         return { ...project, views };
                     })
                 );
 
-                // 按觀看次數降序排列，選出前三名
+                // 按觀看次數降序排列
                 const sortedProjects = projectsWithViews.sort((a, b) => b.views - a.views);
                 
-                console.log('🏆 專案排行榜:', sortedProjects.map((p, i) => `${i+1}. ${p.name}: ${p.views} 次觀看`));
-
                 const hotProjectsContainer = document.getElementById('hot-projects');
                 
                 if (sortedProjects.length === 0) {
-                    // 沒有專案時顯示空狀態
-                    hotProjectsContainer.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">🚀</div>
-                            <div class="empty-title">專案準備中</div>
-                            <div class="empty-desc">精彩內容正在開發中，敬請期待！</div>
-                        </div>
-                    `;
+                    hotProjectsContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-title">專案準備中</div><div class="empty-desc">精彩內容正在開發中，敬請期待！</div></div>`;
                     return;
                 }
 
-                // 取前三名或所有專案（如果少於3個）
-                const topProjects = sortedProjects.slice(0, Math.min(3, sortedProjects.length));
+                // 取前三名
+                const topProjects = sortedProjects.slice(0, 3);
                 
-                console.log(`🎯 顯示前 ${topProjects.length} 名專案`);
-
                 // 生成HTML
                 const projectsHTML = topProjects.map((project, index) => 
                     generateProjectHTML(project, index + 1, project.views)
                 ).join('');
 
                 hotProjectsContainer.innerHTML = projectsHTML;
-                
-                console.log('✅ 熱門專案排行榜載入完成');
 
             } catch (error) {
-                console.error('❌ 載入熱門專案失敗:', error);
-                
-                // 顯示錯誤狀態或備用內容
+                console.error('載入熱門專案失敗:', error);
                 const hotProjectsContainer = document.getElementById('hot-projects');
-                hotProjectsContainer.innerHTML = `
-                    <a href="./Learning/c-pointer-tutorial/" class="project-item">
-                        <div class="project-rank rank-1">🥇</div>
-                        <div class="project-info">
-                            <div class="project-name">C語言指標完整教學</div>
-                            <div class="project-desc">從基礎概念到進階應用，完整掌握C語言指標的精髓</div>
-                            <div class="project-meta">
-                                <span class="category-badge learning">學習</span>
-                                <span>📅 2025-08</span>
-                                <span>🏷️ 已完成</span>
-                                <span>📚 18章節</span>
-                            </div>
-                        </div>
-                        <div class="project-stats">
-                            <div class="project-views">0 次觀看</div>
-                            <div class="project-status">已完成</div>
-                        </div>
-                    </a>
-                `;
+                hotProjectsContainer.innerHTML = `<div class="empty-state"><div>載入失敗，請稍後再試</div></div>`;
             }
         }
 
-        // 追蹤專案點擊 - 新功能：點擊時立即增加觀看次數
-        window.trackProjectClick = async function(projectId) {
-            console.log(`🔗 用戶點擊了專案: ${projectId}`);
-            
-            // 立即增加觀看次數（每次點擊都計算）
-            try {
-                const newViews = await incrementProjectViews(projectId);
-                console.log(`📈 專案 ${projectId} 觀看次數增加到: ${newViews}`);
-                
-                // 可以在這裡添加額外的追蹤邏輯，例如發送到 Google Analytics
-                // gtag('event', 'project_click', {
-                //     'project_id': projectId,
-                //     'new_view_count': newViews
-                // });
-                
-            } catch (error) {
-                console.error(`❌ 無法增加專案 ${projectId} 的觀看次數:`, error);
-            }
+        // 追蹤專案點擊並跳轉
+        window.trackProjectClick = async function(projectId, url) {
+            console.log(`用戶點擊了專案: ${projectId}`);
+            await incrementProjectViews(projectId);
+            window.location.href = url; // 跳轉到目標頁面
         };
 
         // 頁面載入完成時初始化
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 TingNotes 首頁載入完成，開始初始化...');
-            console.log('📋 新的瀏覽次數計算規則：');
-            console.log('   • 每次進入頁面/專案都計算一次瀏覽');
-            console.log('   • 不限制同一用戶重複瀏覽');
-            console.log('   • 主題頁面總次數 = 該主題下所有專案的觀看次數總和');
-            console.log('   • 首頁排行榜顯示全站前三名專案');
-            
             loadHotProjects();
         });
-
-        // 導出函數供其他頁面使用
-        window.TingNotesTracking = {
-            getProjectViews,
-            incrementProjectViews,
-            formatNumber
-        };
     </script>
 
     <script>

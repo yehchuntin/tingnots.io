@@ -538,58 +538,44 @@
         // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        
+        // 特定主題的專案數據庫 (目前為空)
+        const topicProjectsData = {
+            // 'project-id': { ... }
+        };
 
-        // 增加頁面觀看次數
-        async function incrementPageViews() {
+        async function getProjectViews(projectId) {
             try {
-                const counterRef = ref(database, 'counters/page_others');
-                const result = await runTransaction(counterRef, (currentValue) => {
-                    return (currentValue || 0) + 1;
-                });
-                return result.snapshot.val();
-            } catch (error) {
-                console.error('Failed to increment page views:', error);
-                return 0;
-            }
-        }
-
-        // 獲取頁面觀看次數
-        async function getPageViews() {
-            try {
-                const snapshot = await get(ref(database, 'counters/page_others'));
+                const snapshot = await get(ref(database, `counters/content_${projectId}`));
                 return snapshot.exists() ? snapshot.val() : 0;
             } catch (error) {
-                console.error('Failed to get page views:', error);
+                console.error(`Failed to get views for ${projectId}:`, error);
                 return 0;
             }
-        }
-
-        // 檢查是否為新訪客
-        function shouldCountPageView() {
-            const lastVisit = localStorage.getItem('lastOthersPageVisit');
-            const now = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000;
-            
-            if (!lastVisit || (now - parseInt(lastVisit)) > twentyFourHours) {
-                localStorage.setItem('lastOthersPageVisit', now.toString());
-                return true;
-            }
-            return false;
         }
 
         // 更新統計數據
         async function updateStatistics() {
-            // 文章總數（目前為0）
-            document.getElementById('total-posts').textContent = '0';
+            let totalViews = 0;
+            for (const projectId of Object.keys(topicProjectsData)) {
+                totalViews += await getProjectViews(projectId);
+            }
+            
+            // 根據頁面ID更新不同統計數據
+            const pageId = document.body.parentElement.id || window.location.pathname.split('/')[1].toLowerCase();
+            
+            if (document.getElementById('total-experience')) { // 職涯頁
+                document.getElementById('total-experience').textContent = Object.keys(topicProjectsData).length;
+            }
+            if (document.getElementById('total-trips')) { // 旅遊頁
+                document.getElementById('total-trips').textContent = Object.keys(topicProjectsData).length;
+            }
+            if (document.getElementById('total-posts')) { // 雜事分享頁
+                document.getElementById('total-posts').textContent = Object.keys(topicProjectsData).length;
+            }
 
-            // 主題分類數（固定4個）
-            document.getElementById('total-topics').textContent = '4';
-
-            // 總觀看次數
-            const totalViews = await getPageViews();
             document.getElementById('total-views').textContent = totalViews;
 
-            // 設定最後更新時間
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -599,24 +585,6 @@
         // 初始化頁面
         document.addEventListener('DOMContentLoaded', async function() {
             await updateStatistics();
-
-            // 如果是新訪客，增加頁面觀看次數
-            if (shouldCountPageView()) {
-                await incrementPageViews();
-                await updateStatistics(); // 重新更新統計數據
-            }
-
-            // 添加進場動畫
-            const elements = document.querySelectorAll('.stat-card, .category-selector');
-            elements.forEach((element, index) => {
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    element.style.transition = 'all 0.6s ease';
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
         });
     </script>
 
