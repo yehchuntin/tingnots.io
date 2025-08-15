@@ -538,53 +538,161 @@
         // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
-        
-        // 特定主題的專案數據庫 (目前為空)
-        const topicProjectsData = {
-            // 'project-id': { ... }
-        };
 
-        async function getProjectViews(projectId) {
+        // =================================================================================
+        // 專案數據庫：未來所有的新專案都加在這裡！
+        // =================================================================================
+        const allProjectsData = {
+            'c-pointer-tutorial': {
+                topic: 'learning', // 專案所屬主題
+                category: 'programming', // 專案的子分類 (用於學習頁籤)
+                title: 'C語言指標完整教學',
+                subtitle: '從基礎到進階，完整掌握指標精髓',
+                status: 'completed',
+                chapters: 18,
+                publishDate: '2025-08',
+                estimatedTime: '8-12小時',
+                difficulty: '初級-進階',
+                url: './c-pointer-tutorial/',
+                icon: '🔗'
+            }
+            // --- 未來新增專案的範例 ---
+            // 'your-new-project-id': {
+            //     topic: 'career', // 假設這是職涯專案
+            //     category: 'interview', // 子分類
+            //     title: '軟體工程師面試指南',
+            //     subtitle: '從履歷到 offer 的完整攻略',
+            //     status: 'progress', // 進行中
+            //     ...其他資訊
+            // }
+        };
+        // =================================================================================
+
+        // 獲取觀看次數
+        async function getViewCount(projectId) {
             try {
                 const snapshot = await get(ref(database, `counters/content_${projectId}`));
                 return snapshot.exists() ? snapshot.val() : 0;
             } catch (error) {
-                console.error(`Failed to get views for ${projectId}:`, error);
+                console.error('Failed to get view count:', error);
                 return 0;
             }
         }
 
-        // 更新統計數據
-        async function updateStatistics() {
-            let totalViews = 0;
-            for (const projectId of Object.keys(topicProjectsData)) {
-                totalViews += await getProjectViews(projectId);
+        // 增加觀看次數
+        async function incrementViewCount(projectId) {
+            try {
+                const counterRef = ref(database, `counters/content_${projectId}`);
+                await runTransaction(counterRef, (currentValue) => (currentValue || 0) + 1);
+            } catch (error) {
+                console.error('Failed to increment counter:', error);
             }
+        }
+
+        // 格式化數字
+        function formatNumber(num) {
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        // 動態載入專案卡片
+        async function loadProjects(topic, projectsData) {
+            const programmingContainer = document.getElementById('programming-projects');
             
-            // 根據頁面ID更新不同統計數據
-            const pageId = document.body.parentElement.id || window.location.pathname.split('/')[1].toLowerCase();
-            
-            if (document.getElementById('total-experience')) { // 職涯頁
-                document.getElementById('total-experience').textContent = Object.keys(topicProjectsData).length;
-            }
-            if (document.getElementById('total-trips')) { // 旅遊頁
-                document.getElementById('total-trips').textContent = Object.keys(topicProjectsData).length;
-            }
-            if (document.getElementById('total-posts')) { // 雜事分享頁
-                document.getElementById('total-posts').textContent = Object.keys(topicProjectsData).length;
+            // 如果頁面上沒有專案容器，就直接返回
+            if (!programmingContainer) return;
+
+            let html = '';
+            let projectCount = 0;
+            for (const [projectId, project] of Object.entries(projectsData)) {
+                projectCount++;
+                const views = await getViewCount(projectId);
+                const statusClass = project.status === 'completed' ? 'status-completed' : 'status-planned';
+                const statusText = project.status === 'completed' ? '已完成' : '規劃中';
+                
+                html += `
+                    <div class="project-card" onclick="handleProjectClick('${projectId}')">
+                        <div class="project-header">
+                            <div class="project-icon">${project.icon}</div>
+                            <div class="project-info">
+                                <div class="project-title">${project.title}</div>
+                                <div class="project-subtitle">${project.subtitle}</div>
+                            </div>
+                        </div>
+                        <div class="project-meta">
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            <span>📅 ${project.publishDate}</span>
+                            ${project.chapters ? `<span>📚 ${project.chapters}章節</span>` : ''}
+                        </div>
+                        <div class="project-stats">
+                            <div class="view-count">${formatNumber(views)} 次觀看</div>
+                            <div class="difficulty-badge">${project.difficulty}</div>
+                        </div>
+                    </div>
+                `;
             }
 
-            document.getElementById('total-views').textContent = totalViews;
+            // 如果該主題下沒有專案，則不顯示任何卡片
+            if (projectCount > 0) {
+                programmingContainer.innerHTML = html;
+            }
+        }
+
+        // 更新統計數據
+        async function updateStatistics(projectsData) {
+            const completedContent = Object.values(projectsData).filter(p => p.status === 'completed').length;
+            
+            // 更新不同頁面的「內容總數」
+            if(document.getElementById('total-content')) document.getElementById('total-content').textContent = completedContent;
+            if(document.getElementById('total-experience')) document.getElementById('total-experience').textContent = Object.keys(projectsData).length;
+            if(document.getElementById('total-trips')) document.getElementById('total-trips').textContent = Object.keys(projectsData).length;
+            if(document.getElementById('total-posts')) document.getElementById('total-posts').textContent = Object.keys(projectsData).length;
+            
+            let totalViews = 0;
+            for (const projectId of Object.keys(projectsData)) {
+                totalViews += await getViewCount(projectId);
+            }
+            document.getElementById('total-views').textContent = formatNumber(totalViews);
 
             const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            document.getElementById('last-updated').textContent = `${year}.${month}`;
+            document.getElementById('last-updated').textContent = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}`;
         }
+
+        // 處理專案點擊
+        window.handleProjectClick = async function(projectId) {
+            const project = allProjectsData[projectId];
+            if (project && project.url) {
+                await incrementViewCount(projectId);
+                window.location.href = project.url;
+            }
+        };
 
         // 初始化頁面
         document.addEventListener('DOMContentLoaded', async function() {
-            await updateStatistics();
+            // 1. 識別當前在哪個主題頁面 (learning, career, etc.)
+            const pathParts = window.location.pathname.split('/').filter(p => p);
+            const currentTopic = pathParts.length > 0 ? pathParts[0].toLowerCase() : 'unknown';
+
+            // 2. 從總數據中篩選出屬於當前主題的專案
+            const topicProjects = Object.fromEntries(
+                Object.entries(allProjectsData).filter(([id, project]) => project.topic === currentTopic)
+            );
+
+            // 3. 使用篩選後的專案數據來更新統計和載入專案卡片
+            if (Object.keys(topicProjects).length > 0) {
+                // 只有當這個主題下有專案時，才更新統計和載入卡片
+                await updateStatistics(topicProjects);
+                if(currentTopic === 'learning') {
+                    await loadProjects(currentTopic, topicProjects);
+                }
+            } else {
+                // 如果這個主題下沒有專案，將統計數據設為 0
+                if(document.getElementById('total-content')) document.getElementById('total-content').textContent = '0';
+                if(document.getElementById('total-experience')) document.getElementById('total-experience').textContent = '0';
+                if(document.getElementById('total-trips')) document.getElementById('total-trips').textContent = '0';
+                if(document.getElementById('total-posts')) document.getElementById('total-posts').textContent = '0';
+                if(document.getElementById('total-views')) document.getElementById('total-views').textContent = '0';
+            }
         });
     </script>
 
