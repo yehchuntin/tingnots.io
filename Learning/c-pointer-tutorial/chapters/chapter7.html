@@ -7,10 +7,16 @@
   <meta name="description" content="深入理解陣列作為函式參數的機制，陣列退化為指標、sizeof 陷阱、以及正確的陣列傳遞方式。附完整可執行範例。" />
   <style>
     :root {
-      --bg-primary:#fff;--bg-secondary:#f8f9fa;--bg-card:#fff;--text-primary:#2c3e50;--text-secondary:#6c757d;--accent-primary:#3498db;--accent-secondary:#2980b9;--border-color:#e9ecef;--shadow-light:rgba(0,0,0,.1);--shadow-medium:rgba(0,0,0,.15);--gradient-bg:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--code-bg:#1e1e1e;--code-text:#f8f8f2
+      --bg-primary:#fff;--bg-secondary:#f8f9fa;--bg-card:#fff;--text-primary:#2c3e50;--text-secondary:#6c757d;--accent-primary:#3498db;--accent-secondary:#2980b9;--border-color:#e9ecef;--shadow-light:rgba(0,0,0,.1);--shadow-medium:rgba(0,0,0,.15);--gradient-bg:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--code-bg:#1e1e1e;--code-text:#f8f8f2;
+      --theme-btn-bg: rgba(0, 0, 0, 0.1);
+      --theme-btn-border: rgba(0, 0, 0, 0.2);
+      --theme-btn-icon: rgba(0, 0, 0, 0.7);
     }
     [data-theme="dark"]{
-      --bg-primary:#1a1a1a;--bg-secondary:#2d3748;--bg-card:#2d3748;--text-primary:#f7fafc;--text-secondary:#a0aec0;--accent-primary:#4299e1;--accent-secondary:#3182ce;--border-color:#4a5568;--shadow-light:rgba(0,0,0,.3);--shadow-medium:rgba(0,0,0,.4);--gradient-bg:linear-gradient(135deg,#2d3748 0%,#1a202c 100%);--code-bg:#1a202c;--code-text:#f7fafc
+      --bg-primary:#1a1a1a;--bg-secondary:#2d3748;--bg-card:#2d3748;--text-primary:#f7fafc;--text-secondary:#a0aec0;--accent-primary:#4299e1;--accent-secondary:#3182ce;--border-color:#4a5568;--shadow-light:rgba(0,0,0,.3);--shadow-medium:rgba(0,0,0,.4);--gradient-bg:linear-gradient(135deg,#2d3748 0%,#1a202c 100%);--code-bg:#1a202c;--code-text:#f7fafc;
+      --theme-btn-bg: rgba(255, 255, 255, 0.1);
+      --theme-btn-border: rgba(255, 255, 255, 0.3);
+      --theme-btn-icon: rgba(255, 255, 255, 0.8);
     }
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:var(--text-primary);background:var(--gradient-bg);min-height:100vh;transition:all .3s ease}
@@ -33,8 +39,40 @@
     .sub-menu .toc-link{padding:6px 10px;font-size:.8em}
     .main-area{min-width:0}
     .header{background:var(--bg-card);border-radius:15px;padding:25px 30px;margin-bottom:25px;box-shadow:0 8px 32px var(--shadow-light);border:1px solid var(--border-color);position:relative}
-    .theme-toggle{position:absolute;top:15px;right:15px;background:var(--accent-primary);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;transition:all .3s ease;display:flex;align-items:center;justify-content:center}
-    .theme-toggle:hover{background:var(--accent-secondary);transform:scale(1.1)}
+    
+    .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--theme-btn-bg);
+        border: 2px solid var(--theme-btn-border);
+        color: var(--theme-btn-icon);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .theme-toggle:hover {
+        border-color: var(--accent-primary);
+        background: var(--accent-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .theme-icon {
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        transition: all 0.3s ease;
+    }
+
     .breadcrumb{color:var(--text-secondary);font-size:.85em;margin-bottom:12px}
     .breadcrumb a{color:var(--accent-primary);text-decoration:none}
     .breadcrumb a:hover{text-decoration:underline}
@@ -82,7 +120,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- 左側目錄 -->
     <aside class="sidebar">
     <div class="toc-widget">
         <div class="toc-header">
@@ -228,21 +265,23 @@
 
     <div class="main-area">
       <header class="header">
-        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式"><span id="theme-icon">🌙</span></button>
+        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
+            <svg class="theme-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
         <div class="breadcrumb"><a href="../index.html">首頁</a> / <span>Chapter 7</span></div>
         <h1 class="chapter-title">7. Array as Function Argument</h1>
         <p class="chapter-subtitle">陣列作為函式參數的機制、陣列退化、sizeof 陷阱與解決方案</p>
       </header>
 
       <main class="main-content">
-        <!-- 章節封面（占位） -->
         <section class="content-section">
           <div class="section-header"><div class="section-number">🖼️</div><h2 class="section-title">章節封面（占位）</h2></div>
           <p class="content-text">請將你的封面圖放到 <code>images/</code>，檔名例如 <code>ch7-cover.png</code>，並更新 <code>src</code>。</p>
           <div class="memory-diagram"><img src="images/ch7-cover.png" alt="Chapter 7 Cover" style="max-width:100%;height:auto;opacity:.6"/></div>
         </section>
 
-        <!-- 1. 錯誤寫法 - sizeof 陷阱 -->
         <section class="content-section" id="wrong-way">
           <div class="section-header"><div class="section-number">❌</div><h2 class="section-title">錯誤寫法 - sizeof 陷阱</h2></div>
           <p class="content-text">當陣列作為參數傳入函式時，會發生「陣列退化」(Array Decay) 現象，導致 sizeof 計算錯誤。</p>
@@ -300,7 +339,6 @@
           </div>
         </section>
 
-        <!-- 2. 陣列退化現象解析 -->
         <section class="content-section" id="array-decay">
           <div class="section-header"><div class="section-number">📚</div><h2 class="section-title">陣列退化現象解析</h2></div>
           <p class="content-text">了解陣列作為函式參數時的重要特性：</p>
@@ -316,7 +354,6 @@
           </div>
         </section>
 
-        <!-- 3. 正確版本 - 陣列傳遞到函式 (指標方式) -->
         <section class="content-section" id="correct-way">
           <div class="section-header"><div class="section-number">✅</div><h2 class="section-title">正確版本：陣列傳遞到函式 (指標方式)</h2></div>
           <p class="content-text">正確的做法是將陣列大小作為額外的參數傳入函式。</p>
@@ -359,7 +396,6 @@
           </div>
         </section>
 
-        <!-- 4. Call Array by Address 詳解 -->
         <section class="content-section" id="call-by-address">
           <div class="section-header"><div class="section-number">📍</div><h2 class="section-title">Call Array by Address 詳解</h2></div>
           <p class="content-text">當我們將陣列傳遞給函式時，實際上是傳遞陣列第一個元素的位址。</p>
@@ -417,7 +453,6 @@
           </div>
         </section>
 
-        <!-- 5. 記憶體布局圖解 -->
         <section class="content-section" id="memory-layout">
           <div class="section-header"><div class="section-number">🧠</div><h2 class="section-title">記憶體布局圖解</h2></div>
           <p class="content-text">理解陣列在記憶體中的實際配置和函式呼叫時的參數傳遞：</p>
@@ -485,7 +520,6 @@
           </div>
         </section>
 
-        <!-- 小節總結 -->
         <section class="content-section">
           <div class="section-header"><div class="section-number">✅</div><h2 class="section-title">本章重點總結</h2></div>
           <ul class="bullet-list">
@@ -518,8 +552,8 @@
   </div>
 
   <script>
-    function toggleTheme(){const body=document.body,themeIcon=document.getElementById('theme-icon');const cur=body.getAttribute('data-theme');if(cur==='dark'){body.setAttribute('data-theme','light');themeIcon.textContent='🌙';localStorage.setItem('theme','light');}else{body.setAttribute('data-theme','dark');themeIcon.textContent='☀️';localStorage.setItem('theme','dark');}}
-    function loadTheme(){const saved=localStorage.getItem('theme')||'light';const themeIcon=document.getElementById('theme-icon');document.body.setAttribute('data-theme',saved);themeIcon.textContent=saved==='dark'?'☀️':'🌙';}
+    function toggleTheme(){const body=document.body,themeIcon=document.getElementById('theme-icon');const cur=body.getAttribute('data-theme');if(cur==='dark'){body.setAttribute('data-theme','light');themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';localStorage.setItem('theme','light');}else{body.setAttribute('data-theme','dark');themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';localStorage.setItem('theme','dark');}}
+    function loadTheme(){const saved=localStorage.getItem('theme')||'light';const themeIcon=document.getElementById('theme-icon');document.body.setAttribute('data-theme',saved);if(saved==='dark'){themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';}else{themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';}}
     function toggleSubMenu(element){event.preventDefault();const arrow=element.querySelector('.arrow');const subMenu=element.parentElement.querySelector('.sub-menu');if(subMenu){arrow.classList.toggle('expanded');subMenu.classList.toggle('show');}}
     function copyCode(btn,id){const code=document.getElementById(id).querySelector('pre').textContent;navigator.clipboard.writeText(code).then(()=>{const t=btn.textContent;btn.textContent='✅ 已複製';btn.classList.add('copied');setTimeout(()=>{btn.textContent=t;btn.classList.remove('copied')},2000)}).catch(()=>{const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);const t=btn.textContent;btn.textContent='✅ 已複製';btn.classList.add('copied');setTimeout(()=>{btn.textContent=t;btn.classList.remove('copied')},2000)})}
     document.addEventListener('DOMContentLoaded',()=>loadTheme());

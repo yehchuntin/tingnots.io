@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>8. Character arrays and pointers - part&nbsp;1 | C語言指標教學</title>
   <meta name="description" content="介紹字元陣列與指標的基本概念、指標運算以及將字串作為函式參數的技巧。範例涵蓋字串宣告、sizeof 與 strlen 的比較、指標遍歷字串以及常用字串處理函式。" />
-  <!--
-    此頁面的樣式與佈局仿照 chapter5.html 以保持風格一致。
-    使用自定義 CSS 變數來支援深淺色主題切換，並透過 JavaScript 提供主題開關與側邊目錄展開/收合功能。
-  -->
   <style>
     :root {
       --bg-primary: #fff;
@@ -24,6 +20,9 @@
       --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       --code-bg: #1e1e1e;
       --code-text: #f8f8f2;
+      --theme-btn-bg: rgba(0, 0, 0, 0.1);
+      --theme-btn-border: rgba(0, 0, 0, 0.2);
+      --theme-btn-icon: rgba(0, 0, 0, 0.7);
     }
     [data-theme="dark"] {
       --bg-primary: #1a1a1a;
@@ -39,6 +38,9 @@
       --gradient-bg: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
       --code-bg: #1a202c;
       --code-text: #f7fafc;
+      --theme-btn-bg: rgba(255, 255, 255, 0.1);
+      --theme-btn-border: rgba(255, 255, 255, 0.3);
+      --theme-btn-icon: rgba(255, 255, 255, 0.8);
     }
     * {
       margin: 0;
@@ -160,25 +162,36 @@
       position: relative;
     }
     .theme-toggle {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: var(--accent-primary);
-      border: none;
-      color: #fff;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all .3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--theme-btn-bg);
+        border: 2px solid var(--theme-btn-border);
+        color: var(--theme-btn-icon);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
     }
+
     .theme-toggle:hover {
-      background: var(--accent-secondary);
-      transform: scale(1.1);
+        border-color: var(--accent-primary);
+        background: var(--accent-primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .theme-icon {
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        transition: all 0.3s ease;
     }
     .breadcrumb {
       color: var(--text-secondary);
@@ -521,7 +534,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- 側邊目錄 -->
     <aside class="sidebar">
       <div class="toc-widget">
         <div class="toc-header">
@@ -558,7 +570,6 @@
               <a href="chapter7.html" class="toc-link">7. Array as function argument</a>
             </li>
             <li class="toc-item">
-              <!-- 目前所在章節，預設展開子目錄並標示為 active -->
               <a href="chapter8.html" class="toc-link has-submenu active" onclick="toggleSubMenu(this)">
                 <span class="arrow expanded">▶</span> 8. Character arrays and pointers - part 1
               </a>
@@ -653,17 +664,19 @@
       </div>
     </aside>
 
-    <!-- 主要內容區域 -->
     <div class="main-area">
       <header class="header">
-        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式"><span id="theme-icon">🌙</span></button>
+        <button class="theme-toggle" onclick="toggleTheme()" title="切換深淺色模式">
+            <svg class="theme-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
         <div class="breadcrumb"><a href="../index.html">首頁</a> / <span>Chapter 8</span></div>
         <h1 class="chapter-title">8. Character arrays and pointers - part 1</h1>
         <p class="chapter-subtitle">字元陣列與指標基本概念與操作</p>
       </header>
 
       <main class="main-content">
-        <!-- 字串基本概念 -->
         <section class="content-section" id="string-basics">
           <div class="section-header"><div class="section-number">🔤</div><h2 class="section-title">字串基本概念</h2></div>
           <p class="content-text">在 C 語言中，字串是以字元陣列的形式儲存，並以 <code class="highlight">'\0'</code> 作為字串結束的標記。以下列出幾個重要特性：</p>
@@ -743,7 +756,6 @@
           </table>
         </section>
 
-        <!-- 字串與指標 -->
         <section class="content-section" id="string-pointers">
           <div class="section-header"><div class="section-number">🔗</div><h2 class="section-title">字串與指標</h2></div>
           <p class="content-text">字串名稱本身就是指向第一個字元的指標，因此可以利用指標來操作和遍歷字串。指標讓字串處理更加靈活：</p>
@@ -814,7 +826,6 @@
           </div>
         </section>
 
-        <!-- 字串傳入函式 -->
         <section class="content-section" id="string-functions">
           <div class="section-header"><div class="section-number">📥</div><h2 class="section-title">字串傳入函式</h2></div>
           <p class="content-text">當字串作為參數傳入函式時，字元陣列名稱會自動退化為指標。函式可以接收 <code class="highlight">char*</code> 或 <code class="highlight">char[]</code> 參數，並在內部修改字串內容。以下範例示範自訂印字函式：</p>
@@ -875,7 +886,6 @@
           </div>
         </section>
 
-        <!-- 小節總結 -->
         <section class="content-section">
           <div class="section-header"><div class="section-number">✅</div><h2 class="section-title">本章重點總結</h2></div>
           <ul class="bullet-list">
@@ -886,7 +896,6 @@
           </ul>
         </section>
       </main>
-      <!-- 上下章節導覽 -->
       <nav class="navigation">
         <a href="chapter7.html" class="nav-btn prev">
           <div>
@@ -916,11 +925,11 @@
       const current = body.getAttribute('data-theme');
       if (current === 'dark') {
         body.setAttribute('data-theme', 'light');
-        icon.textContent = '🌙';
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
         localStorage.setItem('theme', 'light');
       } else {
         body.setAttribute('data-theme', 'dark');
-        icon.textContent = '☀️';
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
         localStorage.setItem('theme', 'dark');
       }
     }
@@ -928,7 +937,11 @@
       const saved = localStorage.getItem('theme') || 'light';
       const icon = document.getElementById('theme-icon');
       document.body.setAttribute('data-theme', saved);
-      icon.textContent = saved === 'dark' ? '☀️' : '🌙';
+      if (saved === 'dark') {
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>';
+      } else {
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
     }
     // 目錄子選單展開/收合功能
     function toggleSubMenu(el) {
